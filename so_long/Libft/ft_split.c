@@ -3,99 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
+/*   By: doyun <doyun@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/01 21:34:41 by doyun             #+#    #+#             */
-/*   Updated: 2021/08/01 18:07:14 by doyun            ###   ########.fr       */
+/*   Created: 2021/01/04 21:22:58 by doyun             #+#    #+#             */
+/*   Updated: 2021/08/02 23:39:15 by doyun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_char(char *s, char c)
+static int	ft_count(char const *s, char c)
 {
-	int			count;
-	int			idx;
+	int		count;
+	int		i;
 
+	if (!s[0])
+		return (0);
 	count = 0;
-	idx = 0;
-	while (s[idx])
+	if (s[0] != c)
+		count++;
+	i = 1;
+	while (s[i])
 	{
-		while (s[idx] == c)
-			idx++;
-		while (s[idx] != c && s[idx])
-		{
-			idx++;
-			if (s[idx] == c || !(s[idx]))
-				count++;
-		}
+		if (s[i] != c && s[i - 1] == c)
+			count++;
+		i++;
 	}
 	return (count);
 }
 
-static int	check_start(char *s, char c, int start)
+static void	free_str(char **str, int j)
 {
-	int			idx;
+	int		i;
 
-	idx = start;
-	while (s[idx] && s[idx] == c)
-		idx++;
-	if (s[idx] && s[idx] != c)
-		return (idx);
-	return (-1);
+	i = 0;
+	while (i < j)
+		free(str[i++]);
+	free(str);
 }
 
-static int	check_end(char *s, char c)
+static void	fill_str(char *str, char const *s, int start, int end)
 {
-	int			idx;
+	int		i;
 
-	idx = 0;
-	while (s[idx] != c && s[idx])
-		idx++;
-	return (idx);
+	i = 0;
+	while (start < end)
+		str[i++] = s[start++];
 }
 
-static void	allocate(char **split_s, char *s, char c)
+static void	ft_str(char **str, char const *s, char c)
 {
-	int			idx;
-	int			start;
-	int			end;
+	int		i;
+	int		j;
+	int		start;
 
-	idx = -1;
-	start = 0;
-	start = check_start(s, c, start);
-	while (0 <= start)
+	i = 0;
+	while (s[i] && s[i] == c)
+		i++;
+	j = 0;
+	while (s[i])
 	{
-		start = check_start(s, c, start);
-		end = check_end(&s[start], c);
-		split_s[++idx] = ft_substr(s, start, end);
-		if (!(split_s[idx]))
+		start = i;
+		while (s[i] && s[i] != c)
+			i++;
+		str[j] = (char *)ft_calloc((i - start + 1), sizeof(char));
+		if (!str[j])
 		{
-			while (idx > 0)
-			{
-				free(split_s[--idx]);
-				split_s[idx] = 0;
-			}
-			free(split_s);
-			split_s = 0;
+			free_str(str, j);
 			return ;
 		}
-		start = start + end;
+		fill_str(str[j], s, start, i);
+		while (s[i] && s[i] == c)
+			i++;
+		j++;
 	}
-	split_s[idx] = 0;
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char		**split_s;
-	int			low;
+	int		count;
+	char	**str;
 
-	if (!s)
+	if (s == 0)
 		return (0);
-	low = count_char((char *)s, c);
-	split_s = (char **)malloc(sizeof(char *) * (low + 1));
-	if (!split_s)
-		return (0);
-	allocate(split_s, (char *)s, c);
-	return (split_s);
+	count = ft_count(s, c);
+	str = (char **)ft_calloc((count + 1), sizeof(char *));
+	if (!str)
+		return (NULL);
+	ft_str(str, s, c);
+	return (str);
 }

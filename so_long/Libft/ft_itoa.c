@@ -3,62 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
+/*   By: doyun <doyun@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/24 00:58:00 by doyun             #+#    #+#             */
-/*   Updated: 2021/08/01 18:11:38 by doyun            ###   ########.fr       */
+/*   Created: 2021/01/05 14:22:40 by doyun             #+#    #+#             */
+/*   Updated: 2021/08/02 23:28:56 by doyun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	intlen(long long int n)
+static int	itoa_count(int n)
 {
-	long long int	len;
+	int			count;
+	long long	i;
 
-	len = 0;
-	if (n <= 0)
+	i = (long long)n;
+	count = 0;
+	if (i < 0)
 	{
-		len++;
-		n *= -1;
+		count++;
+		i *= -1;
 	}
-	while (n)
+	while (i > 0)
 	{
-		n /= 10;
-		len++;
+		i /= 10;
+		count++;
 	}
-	return (len);
+	return (count);
 }
 
-void	miner_int(int *n, int *len,char **num)
+static void	fill_str(char *str, int n, int count)
 {
-	(*num)[0] = '-';
-	if (*n == -2147483648)
+	int			flag;
+	long long	i;
+
+	i = (long long)n;
+	flag = 1;
+	if (i < 0)
 	{
-		(*num)[--(*len)] = '8';
-		*n = -214748364;
+		flag = -1;
+		i *= -1;
 	}
-	*n *= -1;
+	count -= 1;
+	while (i > 0)
+	{
+		str[count--] = i % 10 + '0';
+		i /= 10;
+	}
+	if (flag == -1)
+		str[count] = '-';
 }
 
 char	*ft_itoa(int n)
 {
-	char			*num;
-	int				len;
+	int		count;
+	char	*str;
 
-	len = intlen(n);
-	num = (char *)malloc(sizeof(char) * len + 1);
-	if (!num)
-		return (0);
-	num[len] = '\0';
-	if (!n)
-		num[0] = '0';
-	if (n < 0)
-		miner_int(&n, &len, &num);
-	while (n)
-	{
-		num[--len] = ((n % 10) + '0');
-		n /= 10;
-	}
-	return (num);
+	if (n == 0)
+		return (ft_strdup("0"));
+	count = itoa_count(n);
+	str = (char *)ft_calloc((count + 1), sizeof(char));
+	if (!str)
+		return (NULL);
+	fill_str(str, n, count);
+	return (str);
 }
