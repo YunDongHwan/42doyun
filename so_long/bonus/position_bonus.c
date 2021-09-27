@@ -21,6 +21,6 @@ void	get_player_position(int *count, t_map *map, int row, int col)
 
 void	get_villian_position(t_map *map, int row, int col)
 {
-	map->v_x = col;
-	map->v_y = row;
+	map->v_x = row;
+	map->v_y = col;
 }

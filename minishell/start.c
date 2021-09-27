@@ -5,9 +5,12 @@ int	get_path(t_mini *mini)
 	char		*path;
 	char		*temp;
 	int			idx;
+	int			ret;
 //	static int	path_flag;
 
-	path = getenv("PATH");
+	ret = ft_getenv(mini, &path, "PATH");
+	if (ret == 0)
+		return (mini->err.malloc);
 	mini->path = ft_split(path, ':');
 	idx = -1;
 	while (mini->path[++idx])
@@ -32,6 +35,7 @@ int	mini_init(t_mini *mini) //mini구조체 안 single,double quo의 초기화 �
 	mini->d_quo = 0;
 	mini->cnt_quo = 0;
 	mini->odd_quo = 0;
+	mini->redirect = 0;
 	mini->err.malloc = -1;
 	mini->err.cmd = -2;
 	mini->err.quo = -3;
@@ -39,44 +43,29 @@ int	mini_init(t_mini *mini) //mini구조체 안 single,double quo의 초기화 �
 	mini->err.split_malloc = -5;
 	mini->err.only_space = -6;
 	mini->err.pipe = -7;
+	mini->err.redirect = -8;
 	if (get_path(mini) == mini->err.malloc)
 		return (mini->err.malloc);
 	return (0);
 }
 
-int	parsing(char *str, t_mini *mini)
+int	func_cmd(t_mini *mini)
 {
-	int ret;
-	int	pipe_ret;
 	int cmd_ret;
-	int	i;
 
-	// 최초 공백 무시 필요
-	if (mini_init(mini) == mini->err.malloc)
-		return (cmd_err("path error", mini->err.path_malloc, mini));
-	i = -1;
-	while (str[++i] == ' ')
-		;
-	if (str[i] == 0)
-		return (mini->err.only_space);
-	ret = space_split(&str[i], ' ', mini); //주어진 문자열을 공백기준으로 쪼갬
-	if (ret == mini->err.malloc) //누수검사 필요
-		return (cmd_err("junghan zzang", mini->err.malloc, mini));
-	else if (ret == mini->err.split_malloc)
-		return (cmd_err("junghan zzang", mini->err.split_malloc, mini));
-	else if (ret == mini->err.pipe)
-		return (cmd_err("junghan zzang", mini->err.pipe, mini));
-	if (mini->buf[0] == NULL)
-		return (0);
-	if (mini->odd_quo == 1)
-		return (cmd_err("junghan ZZANG", mini->err.quo, mini));
-/*	while (*(mini->buf[mini->first]) == 0)
-	{
-		mini->first++;
-		if (mini->buf[mini->first] == 0)
-			return (0);
-	}
-*/	pipe_ret = 0;
+	cmd_ret = check_cmd(mini->buf[mini->first], mini, mini->envp);
+	if (cmd_ret == mini->err.cmd)
+		return (cmd_err(mini->buf[mini->first], mini->err.cmd, mini));
+	if (cmd_ret == mini->err.malloc)
+		return (cmd_err(mini->buf[mini->first], mini->err.malloc, mini));
+	return (1);
+}
+
+int	func_pipe(t_mini *mini)
+{
+	int pipe_ret;
+
+	pipe_ret = 0;
 	if (mini->pipe)
 		pipe_ret = pipe_execve(mini, &(mini->pipe_struct));
 	if (mini->pipe && pipe_ret == 0)
@@ -85,11 +74,54 @@ int	parsing(char *str, t_mini *mini)
 		return (cmd_err("daekim && zzang", mini->err.malloc, mini));
 	else if (pipe_ret == mini->err.pipe)
 		return (cmd_err("daekim && zzang", mini->err.pipe, mini));
-	cmd_ret = check_cmd(mini->buf[mini->first], mini, mini->envp);
-	if (cmd_ret == mini->err.cmd)
-		return (cmd_err(mini->buf[mini->first], mini->err.cmd, mini));
-	if (cmd_ret == mini->err.malloc)
-		return (cmd_err(mini->buf[mini->first], mini->err.malloc, mini));
+	return (1);
+}
+
+int	func_split(t_mini *mini, char *str)
+{
+	int ret;
+
+	ret = space_split(str, ' ', mini); //주어진 문자열을 공백기준으로 쪼갬
+	if (ret == mini->err.malloc) //누수검사 필요
+		return (cmd_err("junghan zzang", mini->err.malloc, mini));
+	else if (ret == mini->err.split_malloc)
+		return (cmd_err("junghan zzang", mini->err.split_malloc, mini));
+	else if (ret == mini->err.pipe)
+		return (cmd_err("junghan zzang", mini->err.pipe, mini));
+	else if (ret == mini->err.redirect)
+		return (-2);
+	if (mini->buf[0] == NULL)
+		return (0);
+	if (mini->odd_quo == 1)
+		return (cmd_err("junghan ZZANG", mini->err.quo, mini));
+	return (1);
+}
+
+
+int	mini_process(char *str, t_mini *mini)
+{
+	int ret;
+	int	i;
+
+	// 최초 공백 무시 필요
+	if (mini_init(mini) == mini->err.malloc)
+		return (cmd_err("path error", mini->err.path_malloc, mini));
+
+	i = -1;
+	while (str[++i] == ' ')
+		;
+	if (str[i] == 0)
+		return (mini->err.only_space);
+
+	ret = func_split(mini, &str[i]);
+	if (ret != 1)
+		return (ret);
+	ret = func_pipe(mini);
+	if (ret != 1)
+		return (ret);
+	ret = func_cmd(mini);
+	if (ret != 1)
+		return (ret);
 	return (0);
 }
 
@@ -135,13 +167,13 @@ int	main(int argc, char **argv, char **envp) //파싱작업
 		return (0);
 	}
 	mini.exit_stat = 0;
+	mini.envp = &envp;
 	while (1)
 	{
 		str = readline("minishell $ "); //표준입력
 		if (str == 0 || *str == 0)
 			continue ;
-		mini.envp = &envp;
-		ret = parsing(str, &mini);
+		ret = mini_process(str, &mini);
 		add_history(str);
 		ret = main_free(&mini, str, ret);
 		if (ret == mini.err.cmd)

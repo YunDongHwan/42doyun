@@ -3,17 +3,22 @@
 int	env_exit_stat(t_mini *mini, char **env, int *len)
 {
 	*env = ft_itoa(mini->exit_stat);
-	*len = 2;
+	*len = 1;
+
 	return (0);
 }
 
 int	search_env(t_mini *mini, char **env, char *tmp, int len)
 {
-	int	idx;
-	int	cmp;
+//	int	idx;
+//	int	cmp;
+	int	ret;
 
-	*env = getenv(tmp);
-	if (*env == 0)
+	len = 0;
+	ret = ft_getenv(mini, env, tmp);
+	if (ret == mini->err.malloc)
+		return (mini->err.malloc);
+/*	if (*env == 0)
 	{
 		idx = -1;
 		while ((*mini->envp)[++idx])
@@ -32,12 +37,12 @@ int	search_env(t_mini *mini, char **env, char *tmp, int len)
 				}
 			}
 		}
-		if ((*mini->envp)[idx] == 0)
+		if ((*mini->envp)[idx] == 0)}
+*/		if (ret == 0)
 			mini->env_flag = 1;
-	}
 	return (0);
 }
-
+/*
 void	only_quo(char *env_str, int i, t_mini *mini)
 {
 	i++;
@@ -59,7 +64,7 @@ void	only_quo(char *env_str, int i, t_mini *mini)
 	//	if (special_char3(env_str[i]))
 	//		mini->quo_flag = 0;
 }
-
+*/
 int	copy_env(char *new, char *env_str, int i, t_mini *mini)
 {
 	char	*env;
@@ -83,15 +88,15 @@ int	copy_env(char *new, char *env_str, int i, t_mini *mini)
 		ret = search_env(mini, &env, tmp, len);
 	if (ret == mini->err.malloc)
 		return (mini->err.malloc);
-		if (len == 0 && !special_char(env_str[i + 1]))
-		{
-				if ((env_str[i + 1] != '\'' && env_str[i + 1] != '"' && mini->quo_flag == 0) || !special_char4(env_str[i + 1]))
-					*new = '$';
-				if (mini->d_quo == 1 || mini->s_quo == 1)
-					*new = '$';
-		}
-		else
-			ft_strlcpy(new, env, ft_strlen(env) + 1);
+	if (len == 0 && !special_char(env_str[i + 1]))
+	{
+		if ((env_str[i + 1] != '\'' && env_str[i + 1] != '"' && mini->quo_flag == 0) || !special_char4(env_str[i + 1]))
+			*new = '$';
+		else if (mini->d_quo == 1 || mini->s_quo == 1)
+			*new = '$';
+	}
+	else
+		ft_strlcpy(new, env, ft_strlen(env) + 1);
 	return (i + len + 1);
 }
 
@@ -104,7 +109,7 @@ int	check_env(char *env_str, int i, t_mini *mini)
 	int		ret;
 
 	len = 0;
-	only_quo(env_str, i, mini);
+	//only_quo(env_str, i, mini);
 	while (special_char(env_str[i + len + 1]))
 		len++;
 	tmp = ft_calloc(len + 1, sizeof(char));
@@ -122,7 +127,7 @@ int	check_env(char *env_str, int i, t_mini *mini)
 		return (mini->err.malloc);
 	}
 	mini->env_len = mini->env_len + ft_strlen(env) - len;
-	if (len != 0)
+	if (len != 0 || env_str[i + 1] == '"')
 		mini->dollar++;
 	if (len == 0)
 		mini->pre_flag = 1;

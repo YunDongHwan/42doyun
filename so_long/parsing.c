@@ -52,14 +52,16 @@ char	**map_parser(t_map *map_info, char *argv, int fd)
 	while (ret)
 	{
 		ret = get_next_line(fd, &(map_info->map[++idx]));
+		if (ret == -1)
+			return (NULL);
 		map_info->temp_col = ft_strlen(map_info->map[idx]);
-		if (idx == map_info->row - 1)
-			break ;
 		if (map_info->col != map_info->temp_col)
 			return (NULL);
+		if (idx == map_info->row - 1)
+			break ;
+
 	}
-	if (ret == -1)
-		return (NULL);
+
 	return (map_info->map);
 }
 

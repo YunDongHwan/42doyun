@@ -21,6 +21,7 @@ typedef	struct s_err
 	int			cmd;
 	int			quo;
 	int			argv;
+	int			redirect;
 }			t_err;
 
 typedef struct s_pipe
@@ -54,6 +55,7 @@ typedef struct s_mini
 	int			dollar;
 	int			first;
 	int			pipe;
+	int			redirect;			
 	int			exit_stat;
 	t_err		err;
 	t_pipe		pipe_struct;
@@ -75,6 +77,7 @@ int		copy_env(char *new, char *env_str, int i, t_mini *mini);
 void	ft_echo(t_mini *mini);
 void	ft_pwd(void);
 void	ft_env(char ***envp);
+int		ft_getenv(t_mini *mini, char **env, char *str);
 int		ft_chdir(t_mini *mini);
 int		ft_export(t_mini *mini, char ***envp);
 int 	ft_unset(t_mini *mini, char ***envp);
