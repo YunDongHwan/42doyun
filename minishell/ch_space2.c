@@ -14,9 +14,6 @@
 
 int	case_quo(char *str, int *idx, t_mini *mini)
 {
-//	printf("idx : %d, str : %c\n", *idx, str[*idx]);
-//	if ((mini->s_quo == 1 || mini->d_quo == 1) && str[*idx] == '\0')
-//		return (0);
 	if (str[*idx] == '\'' && mini->d_quo == 0)
 	{
 		if (mini->s_quo == 0)
@@ -56,7 +53,10 @@ int	check_quo(char *s, char c, int i, t_mini *mini) // s: 주어진 문자열 c:
 	if (s[i] == c) // 닫는 따옴표가 나온경우
 		mini->cnt_quo += 2;
 	if (s[i] == 0) // 따옴표 갯수가 홀수로 끝나는 경우
+	{
 		mini->odd_quo = 1;
+		i--;
+	}
 	return (i);
 }
 

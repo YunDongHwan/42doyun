@@ -4,11 +4,8 @@ void	oper_pipe(t_mini *mini, t_pipe *pi)
 {
 	if (ft_strchr(pi->temp[0], '/') != 0)
 	{
-		if (execve(pi->temp[0], pi->temp, *mini->envp) == -1)
-		{
-			//cmd_err(pi->temp[0], mini->err.cmd, mini);
-			exit(errno);
-		}
+		if (execve(pi->temp[0], pi->temp, mini->envp) == -1)
+			exit(127);
 	}
 	else
 	{
@@ -23,44 +20,37 @@ void	oper_pipe(t_mini *mini, t_pipe *pi)
 			}
 			execve(pi->cmd, pi->temp, 0);
 		}
-		//cmd_err(pi->temp[0], mini->err.cmd, mini);
 	}
-	exit(errno);
+	exit(127);
 }
 
 int	fork_pipe(t_mini *mini, t_pipe *pi)
 {
-	pi->pid = fork();
-	if (pi->pid == 0)
+	pi->pid[pi->pid_idx] = fork();
+	if (pi->pid[pi->pid_idx] == 0)
 	{
 		if (pi->initial != mini->pipe)
 		{
-			dup2(pi->fd[0], 0);
-			close(pi->fd[0]);
-	//		close(pi->fd[1]);
+			dup2(pi->fd[pi->pid_idx - 1][0], 0);
+			close(pi->fd[pi->pid_idx - 1][0]);
+			close(pi->fd[pi->pid_idx - 1][1]);
 		}
 		if (mini->pipe != 0)
 		{
-			dup2(pi->fd[1], 1);
-	//		close(pi->fd[0]);
-			close(pi->fd[1]);
+			dup2(pi->fd[pi->pid_idx][1], 1);
+			close(pi->fd[pi->pid_idx][0]);
+			close(pi->fd[pi->pid_idx][1]);
 		}
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (mini->redirect)
+			redirect_fd(mini->red[pi->pid_idx], mini->red_cnt[pi->pid_idx], pi->pid_idx);
 		oper_pipe(mini, pi);
 	}
-	else if (pi->pid > 0)
+	else if (pi->pid_idx > 0)
 	{
-		pipe(pi->fd);
-		dup2(pi->fd2[0], pi->fd[0]);
-		close(pi->fd2[0]);
-		close(pi->fd2[1]);
-		pipe(pi->fd2);
-	}
-	if (pi->status)
-	{	
-		if (pi->status == mini->err.malloc)
-			return (mini->err.malloc);
-		if (pi->status != 256)
-			cmd_err(pi->temp[0], mini->err.cmd, mini);
+		close(pi->fd[pi->pid_idx - 1][0]);
+		close(pi->fd[pi->pid_idx - 1][1]);
 	}
 	return (0);
 }
@@ -88,17 +78,76 @@ int	parsing_pipe(t_mini *mini, t_pipe *pi)
 	return (0);
 }
 
+int	case_of_status(t_mini *mini, char *cmd, int status)
+{
+	mini->exit_stat = WEXITSTATUS(status);
+	if (status == 3072)
+		return (mini->err.malloc);
+	else if (status == 2)
+		printf("^C\n");
+	else if (status == 3)
+		printf("^\\");
+	else if (WEXITSTATUS(status) == 2) //????
+		printf("minishell: %s\n", strerror(WEXITSTATUS(status)));
+	else if (WEXITSTATUS(status) == 127) //????
+		cmd_err(cmd, mini->err.cmd, mini);
+	return (1);
+}
+
+void cmd_offset(t_mini *mini, int *j)
+{
+	while (mini->buf[(*j)++])
+	{
+		if (ft_strncmp(mini->buf[*j], "|", 2) == 0)
+		{	
+			(*j)++;
+			break ;
+		}
+	}
+}
+
+int pipe_wait(t_mini *mini, t_pipe *pi)
+{
+	int i;
+	int j;
+	int ret;
+	int status;
+
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	i = -1;
+	j = 0;
+	while (++i <= pi->initial)
+	{
+		waitpid(pi->pid[i], &status, 0);
+		ret = case_of_status(mini, mini->buf[j], status);
+		if (ret == 0)
+			return (0);
+		else if (ret == mini->err.malloc)
+			return (mini->err.malloc);
+		cmd_offset(mini, &j);
+	}
+	return (0);
+}
+
 int	pipe_execve(t_mini *mini, t_pipe *pi)
 {
 	int		ret;
 
 	pi->initial = mini->pipe++;
-	pipe(pi->fd);
-	pipe(pi->fd2);
+	pi->pid = (int *)ft_calloc(mini->pipe, sizeof(int));
+	pi->fd = (int **)ft_calloc(pi->initial, sizeof(int *));
+	pi->pid_idx = -1;
+	while (++(pi->pid_idx) < pi->initial)
+		pi->fd[pi->pid_idx] = (int *)ft_calloc(2, sizeof(int));
+	ret = 0;
+	pi->pid_idx = 0;
 	pi->idx = -1;
 	pi->count = -1;
 	while (mini->pipe--)
 	{
+		if (mini->pipe > 0)
+			pipe(pi->fd[pi->pid_idx]);
 		ret = parsing_pipe(mini, pi);
 		if (ret)
 			return (ret);
@@ -106,7 +155,10 @@ int	pipe_execve(t_mini *mini, t_pipe *pi)
 		if (ret)
 			return (ret);
 		ft_free(pi->temp);
+		pi->pid_idx++;
 	}
-	waitpid(pi->pid, &(pi->status), WNOHANG);
-	return (0);
+	ret = pipe_wait(mini, pi);
+	mini->pipe = pi->initial;
+	ft_int_free(pi->fd, pi->initial, pi->pid);
+	return (ret);
 }

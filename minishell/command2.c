@@ -83,6 +83,7 @@ int	show_env(t_mini *mini, char ***envp)
 		}
 	}
 	print_env(sort_arr);
+	ft_free(sort_arr);
 	return (0);
 }
 
@@ -96,7 +97,11 @@ int	cmp_key(t_mini *mini, char **add_arr, int offset)
 		if (mini->buf[offset][idx] == '=')
 			break ;
 	if (!mini->buf[offset][idx])
+	{
+		mini->exit_stat = 1;
 		return (1);
+	}
+	mini->exit_stat = 0;
 	jdx = -1;
 	while (add_arr[++jdx])
 	{
@@ -189,11 +194,12 @@ int	add_env_alloc(t_mini *mini, char ***envp)
 		ft_free(add_arr);
 		return (mini->err.malloc);
 	}
+	ft_free(*envp);
 	*envp = add_arr;
 	return (0);
 }
 
-int	ft_export(t_mini *mini, char ***envp)
+int	ft_export(t_mini *mini, char ***envp) //???? 입력으로 숫자만 들어오는 경우 bash는 에러, 우리는 정상처리
 {
 	int idx;
 
@@ -258,6 +264,7 @@ int	rm_env(t_mini *mini, char ***envp)
 			}
 		}
 	}
+	ft_free(*envp);
 	*envp = rm_arr;
 	return (0);	
 }
@@ -272,5 +279,35 @@ int ft_unset(t_mini *mini, char ***envp)
 	else
 		if (rm_env(mini, envp) == mini->err.malloc)
 			return (mini->err.malloc);
+	mini->exit_stat = 0;
 	return (0);
+}
+
+void	ft_exit(t_mini *mini)
+{
+	int	i;
+
+	if (mini->buf[1])
+	{
+		i = -1;
+		if (mini->buf[1][0] == '-' || mini->buf[1][0] == '+')
+			i++;
+		while (mini->buf[1][++i])
+		{
+			if ('0' > mini->buf[1][i] || mini->buf[1][i] > '9')
+			{
+					printf("exit\nminishell: exit: %s: numeric argument required\n", mini->buf[1]);
+					exit (255);
+			}
+		}
+		if (mini->buf[2] && *(mini->buf[2]))
+		{
+			printf("exit\nminishell: exit: too many arguments\n");
+			exit(1);
+		}
+		printf("exit\n");
+		exit(ft_atoi(mini->buf[1]));
+	}
+	printf("exit\n");
+	exit(0);
 }
