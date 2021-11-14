@@ -1,6 +1,8 @@
 #include "./philo.h"
 
-int	ph_die(t_ph *ph)
+int
+
+ph_die(t_ph *ph)
 {
 	if (present(ph) - ph->last_eat >= ph->in->die_t)
 	{

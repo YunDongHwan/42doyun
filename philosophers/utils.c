@@ -26,7 +26,7 @@ unsigned int	present(t_ph *ph)
 	return (now.tv_sec * 1000 + now.tv_usec / 1000 - ph->in->st_t);
 }
 
-void	doing(t_ph *ph, unsigned int num, unsigned int st)
+void doing(t_ph *ph, unsigned int num, unsigned int st)
 {
 	unsigned int	i;
 

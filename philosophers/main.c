@@ -73,8 +73,9 @@ int	check_argument(char **argv)
 	{
 		while (argv[idx][jdx])
 		{
-			if (argv[idx][jdx] <= '0' || argv[idx][jdx] >= '9')
+			if (argv[idx][jdx] < '0' || argv[idx][jdx] > '9')
 				return (-1);
+			jdx++;
 		}
 	}
 	return (0);
