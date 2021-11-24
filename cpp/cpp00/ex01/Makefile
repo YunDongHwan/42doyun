@@ -4,16 +4,16 @@ CC =		clang++
 
 CXXFLAGS =	-std=c++98 -Wall -Wextra -Werror
 
-SRC =		PhoneBook.cpp
+SRC =		PhoneBook.cpp Contact.cpp
 
-OBJ = 		$(SRC:.cpp=.o)
+OBJ = 	$(SRC:.cpp=.o)
 
 all :		$(NAME)
 
 $(NAME) : $(OBJ)
-		 $(CC) $(CXXFLAGS) -o $@ $^
+		$(CC) $(CXXFLAGS) -o $@ $^
 
-clean :	
+clean :
 			rm -f $(OBJ)
 
 fclean :	clean

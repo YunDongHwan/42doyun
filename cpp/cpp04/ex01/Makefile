@@ -1,10 +1,10 @@
-NAME =		Animal
+NAME =		Brain
 
 CC =		clang++
 
 CXXFLAGS =	-std=c++98 -Wall -Wextra -Werror
 
-SRC =		main.cpp Animal.cpp Cat.cpp Dog.cpp WrongAnimal.cpp WrongCat.cpp
+SRC =		main.cpp Animal.cpp Cat.cpp Dog.cpp WrongAnimal.cpp WrongCat.cpp Brain.cpp
 
 SRC_PATH =	$(addprefix ./srcs/, $(SRC))
 

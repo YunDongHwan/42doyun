@@ -68,9 +68,9 @@ int	check_argument(char **argv)
 	int jdx;
 
 	idx = 0;
-	jdx = 0;
 	while (argv[++idx])
 	{
+		jdx = 0;
 		while (argv[idx][jdx])
 		{
 			if (argv[idx][jdx] < '0' || argv[idx][jdx] > '9')
@@ -91,7 +91,7 @@ int	main(int argc, char **argv)
 	if (argc != 5 && argc != 6)
 		return (print_error());
 	if (check_argument(argv) == -1)
-		return (printf_error());
+		return (print_error());
 	check = ph_init(argc, argv, &info, &ph);
 	if (check == -1)
 		return (print_error());
