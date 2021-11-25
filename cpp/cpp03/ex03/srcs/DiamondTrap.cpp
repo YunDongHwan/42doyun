@@ -36,7 +36,7 @@ DiamondTrap::~DiamondTrap()
     std::cout << "DiamondTrap <" << Name << "> is uncalled !"<< std::endl;
 }
 
-DiamondTrap::DiamondTrap(const DiamondTrap &src) : ClapTrap(src), ScavTrap(src), FragTrap(src)
+DiamondTrap::DiamondTrap(const DiamondTrap &src) :  ScavTrap(src), FragTrap(src)
 {
 	*this = src;
 }

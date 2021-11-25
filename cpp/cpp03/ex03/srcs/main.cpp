@@ -3,6 +3,10 @@
 int main()
 {
     {
+        DiamondTrap doyun;
+    }
+    std::cout << std::endl;
+    {
     DiamondTrap james("JAMES");
 
     james.attack("peter");

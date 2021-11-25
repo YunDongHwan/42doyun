@@ -2,9 +2,9 @@ NAME =		DiamondTrap
 
 CC =		clang++
 
-CXXFLAGS =	-std=c++98 -Wall -Wextra -Werror
+CXXFLAGS =	-Wall -Wextra -Werror
 
-SRC =		ClapTrap.cpp ScavTrap.cpp FragTrap.cpp DiamondTrap.cpp main.cpp 
+SRC =		ClapTrap.cpp ScavTrap.cpp FragTrap.cpp DiamondTrap.cpp main.cpp
 
 SRC_PATH =	$(addprefix ./srcs/, $(SRC))
 
@@ -15,7 +15,7 @@ INC_PATH = 	./includes
 all :		$(NAME)
 
 $(NAME) : $(OBJ)
-		$(CC) $(CXXFLAGS) -I $(INC_PATH) -o $@ $^
+		$(CC) $(CXXFLAGS) -I $(INC_PATH) -o $@ $(SRC_PATH)
 
 clean :
 			rm -f $(OBJ)
