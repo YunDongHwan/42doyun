@@ -14,33 +14,41 @@ int main()
     try
     {
         Intern someRandomIntern;
-
+        std::cout << std::endl;
         scf = someRandomIntern.makeForm("shrubbery creation", "warrr_Mansion");
+        std::cout << *scf;
         rrf = someRandomIntern.makeForm("robotomy request", "robo");
+        std::cout << *rrf;
         ppf = someRandomIntern.makeForm("presidential pardon", "cheolsoo");
+        std::cout << *ppf;
         wrong = someRandomIntern.makeForm("Wrong case", "cheolsoo");
-
-        Bureaucrat cheolsoo(2);
-    
+        std::cout << std::endl;
+        Bureaucrat cheolsoo("cheolsoo", 2);
+        std::cout << cheolsoo;
+        std::cout << std::endl;
         if (scf != 0)
         {
-            scf->beSigned(cheolsoo);
-            scf->execute(cheolsoo);
+            cheolsoo.signForm(*scf);
+            cheolsoo.executeForm(*scf);
+            std::cout << std::endl;
         }
         if (rrf != 0)
         {
-            rrf->beSigned(cheolsoo);
-            rrf->execute(cheolsoo);
+            cheolsoo.signForm(*rrf);
+            cheolsoo.executeForm(*rrf);
+            std::cout << std::endl;
         }
         if (ppf != 0)
         {
-            ppf->beSigned(cheolsoo);
-            ppf->execute(cheolsoo);   
+            cheolsoo.signForm(*ppf);
+            cheolsoo.executeForm(*ppf);
+            std::cout << std::endl;
         }
         if (wrong != 0)
         {
-            wrong->beSigned(cheolsoo);
-            wrong->execute(cheolsoo);   
+            cheolsoo.signForm(*wrong);
+            cheolsoo.executeForm(*wrong);
+            std::cout << std::endl;
         }
     }
     catch (std::exception & e)
@@ -51,50 +59,5 @@ int main()
     delete rrf;
     delete ppf;
     delete wrong;
-/*
-    std::cout << "test 2 ------------------" << std::endl;
-    try
-    {
-        Bureaucrat cheolsoo(140);
-        Bureaucrat yuri(55);
-        Bureaucrat hoon(15);
-        ShrubberyCreationForm sh("warrr_Mansion");
-        RobotomyRequestForm ro("robo");
-        PresidentialPardonForm pr("hoon");
-
-        try
-        {
-            sh.beSigned(cheolsoo);
-            sh.execute(cheolsoo);
-        }
-        catch(std::exception& e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-        try
-        {
-            ro.beSigned(yuri);
-            ro.execute(yuri);
-        }
-        catch(std::exception& e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-        try
-        {
-            pr.beSigned(hoon);
-            pr.execute(hoon);
-        }
-        catch(std::exception& e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-        
-    }
-    catch (std::exception & e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    */
     return (0);
 }

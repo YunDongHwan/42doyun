@@ -4,6 +4,7 @@
 # include <iostream>
 # include <string>
 #include <sstream>
+
 class Zombie
 {
     private:
@@ -18,5 +19,4 @@ class Zombie
 };
 
 Zombie* zombieHorde(int N, std::string name);
-
 #endif

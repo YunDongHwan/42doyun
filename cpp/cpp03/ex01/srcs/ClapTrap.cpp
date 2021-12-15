@@ -4,8 +4,8 @@ ClapTrap::ClapTrap()
 {
     Name = "noname";
     Hitpoints = 10;
-    Energy_points = 10;
-    Attack_damage = 0;
+    EnergyPoints = 10;
+    AttackDamage = 0;
     std::cout << "ClapTrap <" << Name << "> is called !"<< std::endl;
 }
 
@@ -13,14 +13,15 @@ ClapTrap::ClapTrap(std::string name)
 {
     Name = name;
     Hitpoints = 10;
-    Energy_points = 10;
-    Attack_damage = 0;
+    EnergyPoints = 10;
+    AttackDamage = 0;
     std::cout << "ClapTrap <" << Name << "> is called !"<< std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &src)
 {
 	*this = src;
+    std::cout << "ClapTrap <" << Name << "> is copy called !"<< std::endl;
 }
 
 ClapTrap::~ClapTrap()
@@ -34,22 +35,22 @@ ClapTrap & ClapTrap::operator=(const ClapTrap &src)
 	{
 		Name = src.Name;
         Hitpoints = src.Hitpoints;
-        Energy_points = src.Energy_points;
-        Attack_damage = src.Attack_damage;
+        EnergyPoints = src.EnergyPoints;
+        AttackDamage = src.AttackDamage;
 	}
 	return (*this);
 }
 
 void ClapTrap::attack(std::string const & target)
 {
-     if (Energy_points == 0)
+     if (EnergyPoints == 0)
     {
         std::cout << "ClapTrap <" << Name \
         << "> has no Energy point !" <<std::endl;
     }
     else
     {
-        Energy_points--;
+        EnergyPoints--;
         std::cout << "ClapTrap <" << Name \
         << "> attacks <" << target << ">" << std::endl;
     }

@@ -79,6 +79,9 @@ int main()
 	me->unequip(5);
 	delete tmp7;
 
+	ICharacter *james = new Character(*dynamic_cast<Character *>(me));
+	delete james;
+
 	delete bob;
 	delete me;
 	delete src;

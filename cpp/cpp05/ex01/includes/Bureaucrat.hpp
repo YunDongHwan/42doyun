@@ -10,19 +10,13 @@ class Form;
 class HighException : public std::exception
 {
     public:
-        const char *what() const throw()
-        {
-            return ("Too High !!!");
-        }
+        const char *what() const throw();
 };
 
 class LowException : public std::exception
 {
     public:
-        const char *what() const throw()
-        {
-            return("Too Low !!!");
-        }
+        const char *what() const throw();
 };
 
 class Bureaucrat
@@ -33,7 +27,7 @@ class Bureaucrat
     public:
         Bureaucrat();
         Bureaucrat(const Bureaucrat &src);
-        Bureaucrat(const int grade);
+        Bureaucrat(const std::string name, const int grade);
         Bureaucrat& operator= (const Bureaucrat &src);
         ~Bureaucrat();
         

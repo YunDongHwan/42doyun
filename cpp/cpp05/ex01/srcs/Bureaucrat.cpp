@@ -8,10 +8,11 @@ Bureaucrat::Bureaucrat() : name("cheolsoo")
 
 Bureaucrat::Bureaucrat(const Bureaucrat &src) : name("cheolsoo")
 {
+    std::cout << "Create Bureaucrat!" << std::endl;
     *this = src;
-}    
+}
 
-Bureaucrat::Bureaucrat(const int grade) : name("cheolsoo")
+Bureaucrat::Bureaucrat(const std::string name, const int grade) : name(name)
 {
     if (grade < 1)
         throw GradeTooHighException;
@@ -19,15 +20,12 @@ Bureaucrat::Bureaucrat(const int grade) : name("cheolsoo")
         throw GradeTooLowException;
     this->grade = grade;
     std::cout << "Create Bureaucrat!" << std::endl;
-}  
+}
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat &src)
 {
     if (this != &src)
-    {
         grade = src.getGrade();
-        std::cout << "Create Bureaucrat!" << std::endl;
-    }
     return (*this);
 }
 
@@ -86,6 +84,14 @@ void Bureaucrat::demotion(int changetheworld)
 
 void Bureaucrat::signForm(Form &src)
 {
+    try
+    {
+        src.beSigned(*this);
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
     if (src.getSign() == true)
     {
         std::cout << "<" << getName() << \
@@ -98,4 +104,14 @@ void Bureaucrat::signForm(Form &src)
         "> cannot sign <" << src.getName() << \
         "> because <Too Low !!!>" << std::endl;
     }
+}
+
+const char *HighException::what() const throw()
+{
+    return ("Too High !!!");
+}
+
+const char *LowException::what() const throw()
+{
+    return("Too Low !!!");
 }

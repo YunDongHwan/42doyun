@@ -2,7 +2,7 @@ NAME =		Bureaucrat
 
 CC =		clang++
 
-CXXFLAGS =	-fsanitize=address -g3 -Wall -Wextra -Werror
+CXXFLAGS =	-std=c++98 -Wall -Wextra -Werror
 
 SRC =		main.cpp Bureaucrat.cpp Form.cpp ShrubberyCreationForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp
 
@@ -15,7 +15,7 @@ INC_PATH = 	./includes
 all :		$(NAME)
 
 $(NAME) : $(OBJ)
-		$(CC) $(CXXFLAGS) -I $(INC_PATH) -o $@ $(SRC_PATH)
+		$(CC) $(CXXFLAGS) -I $(INC_PATH) -o $@ $^
 
 clean :
 			rm -f $(OBJ)

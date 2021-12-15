@@ -20,11 +20,12 @@ class Character : public ICharacter
 	private:
 		std::string Name;
 		AMateria *materia[4];
+		
 	public:
 		Character();
 		Character(std::string const &Name);
-		Character(const Character& src);
-		Character & operator=(const Character& src);
+		Character(Character& src);
+		Character & operator=(Character& src);
 		virtual ~Character();
 
 		virtual std::string const &getName() const;
