@@ -1,245 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sonkang <sonkang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/24 10:17:04 by sonkang           #+#    #+#             */
+/*   Updated: 2021/12/24 10:17:06 by sonkang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int ft_error(char *str)
+void	get_texture(t_info *info)
 {
-    printf("Error\n%s\n", str);
-    return (1);
-}
+	int		i;
 
-int get_newline(t_map *map, int fd)
-{
-    int ret;
-    char buf;
-
-    map->row = 0;
-    ret = read(fd, &buf, 1);
-    if (buf == '\n')
-		map->row++;
-	while (ret > 0)
+	i = -1;
+	while (++i < 4)
 	{
-		if (buf == '\n')
-			map->row++;
-		ret = read(fd, &buf, 1);
+		info->tex[i].img = mlx_xpm_file_to_image(info->win.mlx, \
+		info->map.path[i], &info->tex[i].img_width, &info->tex[i].img_height);
+		info->tex[i].addr = (unsigned int *)mlx_get_data_addr \
+		(info->tex[i].img, &info->tex[i].bits_per_pixel, \
+		&info->tex[i].line_length, &info->tex[i].endian);
 	}
-	close(fd);
-	if (ret == -1)
-		return (ft_error("Read error"));
+}
+
+void	show_win(t_info *info)
+{
+	grap_init(info);
+	info->win.mlx = mlx_init();
+	info->win.mlx_win = mlx_new_window(info->win.mlx, \
+		info->win.win_w, info->win.win_h, "cub3D");
+	info->fimg.img = mlx_new_image(info->win.mlx, \
+		info->win.win_w, info->win.win_h);
+	info->fimg.addr = (unsigned int *)mlx_get_data_addr(info->fimg.img, \
+		&info->fimg.bits_per_pixel, &info->fimg.line_length, \
+		&info->fimg.endian);
+	get_texture(info);
+	mlx_hook(info->win.mlx_win, 2, 0, check_keypress, info);
+	mlx_hook(info->win.mlx_win, 17, 0, check_button, info);
+	mlx_loop_hook(info->win.mlx, img_conv, info);
+	mlx_loop(info->win.mlx);
+}
+
+int	parsing(char *argv, t_map *map)
+{
+	if (path_allocate(map))
+		return (1);
+	if (check_extention(argv, ".cub"))
+		return (ft_error("Invaild extention(cub)"));
+	if (get_element(argv, map))
+		return (1);
 	return (0);
 }
 
-int	check_extention(char *argv, char *str)
+void	init_struct(t_info *info)
 {
-	int		len;
-	int		ret;
+	int		i;
 
-	len = ft_strlen(argv);
-	if (len >= 5)
-		ret = ft_strncmp(&(argv[len - 4]), str, 4);
+	i = -1;
+	while (++i < 6)
+		info->map.wfc[i] = 0;
+	info->map.cnt_wfc = 0;
+	info->map.direction = 0;
+	info->map.row = 0;
+	info->map.cnt_nl = 0;
+}
+
+int	main(int argc, char **argv)
+{
+	t_info	info;
+
+	if (argc == 2)
+	{
+		init_struct(&info);
+		if (parsing(argv[1], &info.map))
+			return (1);
+		show_win(&info);
+	}
 	else
-		return (1);
-	if (ret != 0)
-		return (1);
+		return (ft_error("Invalid number of arguments"));
 	return (0);
-}
-
-char *get_ele(int i)
-{
-    if (i == 0)
-        return ("NO");
-    if (i == 1)
-        return ("SO");
-    if (i == 2)
-        return ("WE");
-    if (i == 3)
-        return ("EA");
-    if (i == 5)
-        return ("F");
-    if (i == 6)
-        return ("C");
-    return (0);
-}
-
-int get_rgb(t_map *map, char *str, int i)
-{
-    int     num;
-    int     idx;
-    int     sum;
-    char    **rgb;
-
-    rgb = ft_split(str, ',');
-    if (!rgb)
-        return (ft_error("Split error"));
-    idx = -1;
-    sum = 0;
-    while (rgb[++idx])
-    {
-        num = ft_atoi(rgb[idx]);
-        if (0 > num || num > 255)
-            return (ft_error("Out of RGB range"));
-        sum = sum * 256 + num;
-    }
-    if (idx != 3)
-        return (ft_error("Not RGB"));
-    if (i == 5)
-        map->floor = sum;
-    else if (i == 6)
-        map->ceilling = sum;
-    return (0);
-}
-
-int check_form(t_map *map, char **split, int i)
-{
-    if (split[2] != 0)
-            return (ft_error("Unnecessary information"));
-    if (i < 4)
-    {
-        if (!split[0] || get_ele(i))
-            return (ft_error("Invalid element"));
-        if(ft_strncmp(split[0], get_ele(i), 3))
-            return (ft_error("Invalid element"));
-        if (check_extention(split[1], ".xpm"))
-            return (ft_error("Invaild extention(xpm)"));
-        map->path[i] = ft_strdup(split[1]);
-    }
-    else
-    {
-        printf("split %p get_ele %s\n", split[0], get_ele(i));
-        if (!split[0] || get_ele(i))
-            return (ft_error("Invalid element"));
-        if (ft_strncmp(split[0], get_ele(i), 2))
-            return (ft_error("Invalid element"));
-        if (get_rgb(map, split[1], i))
-            return (ft_error("**get_rgb**"));
-    }
-    return (0);
-}
-
-int get_path_color(t_map *map, int fd)
-{
-    char    *buf;
-    char    **split;
-    int     ret;
-    int     i;
-
-    i = -1;
-    while (++i < 8)
-    {
-        ret = get_next_line(fd, &buf);
-        if (ret == -1)
-            return (ft_error("GNL error"));
-        if (!*buf)
-            continue;
-        split = ft_split(buf, ' ');
-        if (check_form(map, split, i))
-            return(ft_error("**check_form**"));
-    }
-    return (0);
-}
-
-int row_parsing(t_map *map, int fd)
-{
-    int     ret;
-    int     idx;
-
-    idx = -1;
-    ret = 1;
-	while (ret > 0)
-		ret = get_next_line(fd, &(map->map[++idx]));
-    if (ret == -1)
-        return (ft_error("GNL error"));
-    return (0);
-}
-
-int map_parsing(char *argv, t_map *map)
-{
-    int     fd;
-    int     cnt;
-    char    buf;
-
-    fd = open(argv, O_RDONLY);
-    if (fd == -1)
-        return (ft_error("Open error"));
-    map->map = (char **)ft_calloc(map->row + 1, sizeof(char *));
-    if (!map->map)
-        return (ft_error("Allocate error"));
-    cnt = 0;
-    while (42)
-    {
-        if (read(fd, &buf, 1) == -1)
-            return (ft_error("Read error"));
-        if (buf == '\n')
-            cnt++;
-        if (cnt == 8)
-            break ;
-    }
-    if (row_parsing(map, fd))
-        return (ft_error("**row_parsing**"));
-    return (0);
-}
-
-int get_element(char *argv, t_map *map)
-{
-    int fd;
-
-    fd = open(argv, O_RDONLY);
-	if (fd == -1)
-        return (ft_error("Open error"));
-    if (get_path_color(map, fd))
-        return (ft_error("**get_path_color**"));
-    if (get_newline(map, fd))
-        return(ft_error("**get_newline**"));
-    close(fd);
-    if (map_parsing(argv, map))//스페이스 처리 필요
-        return (ft_error("**map_parsing**"));
-    return (0);
-}
-
-void    ft_printf(t_map map)
-{
-    int i = -1;
-    while (++i < 4)
-    {
-        printf("path : %s\n", map.path[i]);
-    }
-    printf("floor : %d ceilling : %d\n", map.floor, map.ceilling);
-    printf("row : %d\n", map.row);
-    i = -1;
-    while (i++ < map.row)
-    {
-        printf("%s\n", map.map[i]);
-    }
-}
-
-int map_init(t_map *map)
-{
-    map->path = (char **)ft_calloc(5, sizeof(char*));
-    if (!map->path)
-        return(ft_error("Allocate error"));
-    return (0);
-}
-
-int parsing(char *argv)
-{
-    t_map   map;
-    
-    if (map_init(&map))
-        return (1);
-    if (check_extention(argv, ".cub"))
-        return (ft_error("Invaild extention(cub)"));
-    if (get_element(argv, &map))
-        return (ft_error("**get_element**"));
-    ft_printf(map);
-    return (0);
-}
-
-int main(int argc, char **argv)
-{
-    if (argc == 2)
-    {
-        if (parsing(argv[1]))
-            return(1);
-    }
-    else
-        return (ft_error("Invalid number of arguments"));
-    return (0);
 }

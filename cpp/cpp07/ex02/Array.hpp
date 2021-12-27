@@ -2,9 +2,10 @@
 # define ARRAY_HPP
 
 # include <iostream>
+# include <ctime>
 # define MAX_VAL 750
 
-template <typename T> 
+template <typename T>
 class Array
 {
     private:
@@ -20,7 +21,7 @@ class Array
         T& operator[](size_t n);
 };
 
-template <typename T> 
+template <typename T>
 Array<T>::Array()
 {
     arr = new T[0];
@@ -28,7 +29,7 @@ Array<T>::Array()
     std::cout << "Create Array" << std::endl;
 }
 
-template <typename T> 
+template <typename T>
 Array<T>::Array(unsigned int n)
 {
     arr = new T[n];
@@ -36,7 +37,7 @@ Array<T>::Array(unsigned int n)
     std::cout << "Create Array" << std::endl;
 }
 
-template <typename T> 
+template <typename T>
 Array<T>::Array(const Array &src)
 {
     if (this != &src)
@@ -51,33 +52,37 @@ Array<T>::Array(const Array &src)
     std::cout << "Create Copy Array" << std::endl;
 }
 
-template <typename T> 
-Array<T>::~Array()
-{
-    delete[] arr;
-    std::cout << "Delete Array" << std::endl;   
-}
-
-template <typename T> 
+template <typename T>
 Array<T>& Array<T>::operator=(const Array &src)
 {
-    arr_size = src.size();
-    this->arr = new T[arr_size];
-    for (size_t i = 0; i < arr_size; i++)
+    if (this != &src)
     {
-        arr[i] = src.arr[i];
+        delete[] this->arr;
+        arr_size = src.size();
+        this->arr = new T[arr_size];
+        for (size_t i = 0; i < arr_size; i++)
+        {
+            arr[i] = src.arr[i];
+        }
     }
     std::cout << "Create copy assign Array" << std::endl;
     return (*this);
 }
 
-template <typename T> 
+template <typename T>
+Array<T>::~Array()
+{
+    delete[] arr;
+    std::cout << "Delete Array" << std::endl;
+}
+
+template <typename T>
 size_t Array<T>::size() const
 {
     return (arr_size);
 }
 
-template <typename T> 
+template <typename T>
 T& Array<T>::operator[](size_t n)
 {
     if (n < 0 || n >= MAX_VAL)

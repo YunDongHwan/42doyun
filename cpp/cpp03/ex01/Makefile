@@ -2,7 +2,7 @@ NAME =		ScavTrap
 
 CC =		clang++
 
-CXXFLAGS =	-std=c++98 -Wall -Wextra -Werror
+CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
 
 SRC =		ClapTrap.cpp ScavTrap.cpp main.cpp
 
