@@ -23,7 +23,7 @@ struct Buffer
 };
 
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))    //1,048,576
 
 template<typename T>
 class MutantStack : public ft::stack<T>
