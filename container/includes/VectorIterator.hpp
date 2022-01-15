@@ -5,14 +5,14 @@
 
 namespace ft
 {
-	template<class IterT>
+	template<class T>
 	class Iterator
 	{
 		protected:
-   			typedef iterator_traits<IterT>							traits_type;
+   			typedef iterator_traits<T*>						traits_type;
 
 		public:
-			typedef IterT											iterator_type;
+			typedef T											iterator_type;
 			typedef typename traits_type::iterator_category			iterator_category;
 			typedef typename traits_type::value_type				value_type;
 			typedef typename traits_type::difference_type			difference_type;
@@ -76,25 +76,25 @@ namespace ft
 	template<class T>
 	bool Iterator<T>::operator==(Iterator const &tmp)
 	{
-		return (ptr == tmp.ptr)
+		return (ptr == tmp.ptr);
 	}
 
 	template<class T>
 	bool Iterator<T>::operator!=(Iterator const &tmp)
 	{
-		return (ptr != tmp.ptr)
+		return (ptr != tmp.ptr);
 	}
 
 	template<class T>
-	Iterator<T>::reference Iterator<T>::operator*()
+	typename Iterator<T>::reference Iterator<T>::operator*()
 	{
-		return (*this);
+		return (*ptr);
 	}
 
 	template<class T>
-	Iterator<T>::pointer Iterator<T>::operator->()
+	typename Iterator<T>::pointer Iterator<T>::operator->()
 	{
-		return (this);
+		return (ptr);
 	}
 
 	template<class T>
@@ -170,9 +170,9 @@ namespace ft
 	}
 
 	template<class T>
-	Iterator<T>::reference Iterator<T>::operator[](int n)
+	typename Iterator<T>::reference Iterator<T>::operator[](int n)
 	{
-		return (*(this + n))
+		return (*(this + n));
 	}
 }
 

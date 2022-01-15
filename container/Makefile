@@ -1,4 +1,4 @@
-NAME =		Function
+NAME =		Vector
 
 CC =		clang++
 
@@ -6,12 +6,16 @@ CXXFLAGS =	-Wall -Wextra -Werror
 
 SRC =		Vector.cpp
 
-OBJ = 		$(SRC:.cpp=.o)
+SRC_PATH =	$(addprefix ./srcs/, $(SRC))
+
+OBJ = 		$(SRC_PATH:.cpp=.o)
+
+INC_PATH = 	./includes
 
 all :		$(NAME)
 
 $(NAME) : $(OBJ)
-		 $(CC) $(CXXFLAGS) -o $@ $(SRC)
+		$(CC) $(CXXFLAGS) -I $(INC_PATH) -o $@ $(SRC_PATH)
 
 clean :
 			rm -f $(OBJ)

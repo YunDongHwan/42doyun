@@ -4,6 +4,7 @@
 # include <iostream>
 # include <memory>
 # include "VectorIterator.hpp"
+# include "Identifies.hpp"
 
 namespace ft
 {
@@ -19,13 +20,13 @@ namespace ft
 			typedef typename Alloc::const_reference const_reference;
 			typedef typename Alloc::pointer pointer;
 			typedef typename Alloc::const_pointer const_pointer;
-			typedef typename Iterator<value_type> iterator;
-			typedef typename const Iterator<value_type> const_iterator;
+			typedef Iterator<T> iterator;
+			typedef const Iterator<T> const_iterator;
 		//	typedef reverse_iterator<iterator> reverse_iterator;
 		//	typedef reverse_iterator<const_iterator> const_reverse_iterator;
 
 		private:
-			pointer *v_arr;
+			pointer v_arr;
 			allocator_type v_alloc;
 			size_type v_size;
 			size_type v_capacity;
@@ -37,14 +38,14 @@ namespace ft
 			Vector(size_type count);
 			Vector(size_type count, value_type value);
 			template <class InputIterator>
-			Vector( InputIterator first, InputIterator last);
+			Vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
 			Vector (const Vector& other);
 			Vector& operator= (const Vector& other);
-			void assign( size_type count, const_pointer hint=0 );
+			void assign( size_type count, const_pointer hint );
 			void assign (size_type count, const value_type& value);
 			template <class InputIterator>
-			void assign (InputIterator first, InputIterator last);
-			allocator_type get_allocator ( ) const ;
+			void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
+			allocator_type get_allocator ( ) const;
 			~Vector();
 
 			//Element access
@@ -79,7 +80,7 @@ namespace ft
 			iterator insert( iterator pos, const T& value );
 			void insert( iterator pos, size_type count, const T& value );
 			template <class InputIterator>
-			void insert( iterator pos, InputIterator first, InputIterator last );
+			void insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
 	/*		iterator erase( iterator pos );
 			iterator erase (iterator first, iterator last);
 			void push_back( const T& value );
@@ -121,7 +122,7 @@ namespace ft
 
 	template<class T, class Alloc>
 	template <class InputIterator>
-    Vector<T, Alloc>::Vector (InputIterator first, InputIterator last)
+    Vector<T, Alloc>::Vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
 	{
 		v_size = last - first;
 		v_capacity = v_size + 4;
@@ -153,7 +154,7 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	void Vector<T, Alloc>::assign( size_type count, const_pointer hint = 0 )
+	void Vector<T, Alloc>::assign( size_type count, const_pointer hint )
 	{
 		v_arr = v_alloc.allocate(count);
 		for (size_type i = 0; i < v_size; i++)
@@ -174,31 +175,31 @@ namespace ft
 
 	template<class T, class Alloc>
 	template <class InputIterator>
- 	void Vector<T, Alloc>::assign (InputIterator first, InputIterator last)
+ 	void Vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
 	{
 		v_arr = v_alloc.allocate(v_capacity);
 		for (size_type i = 0; first != last; first++)
 		{
-			v_arr[i++] = first;
+			v_alloc.construct(v_arr[i++], *first);
 		}
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::allocator_type Vector<T, Alloc>::get_allocator ( ) const
+	typename Vector<T, Alloc>::allocator_type Vector<T, Alloc>::get_allocator ( ) const
 	{
-		return (v_alloc)
+		return (v_alloc);
 	}
 
 	template < class T, class Alloc >
 	Vector<T, Alloc>::~Vector()
 	{
-		this->v_alloc.destroy();
-		this->v_alloc.deallocate();
+		// this->v_alloc.destroy();
+		// this->v_alloc.deallocate();
 	}
 
 	//Element access
 	template < class T, class Alloc >
-	Vector<T, Alloc>::reference Vector<T, Alloc>::at(size_type pos)
+	typename Vector<T, Alloc>::reference Vector<T, Alloc>::at(size_type pos)
 	{
 		if (!(pos < size()))
 		{
@@ -208,7 +209,7 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_reference Vector<T, Alloc>::at( size_type pos ) const
+	typename Vector<T, Alloc>::const_reference Vector<T, Alloc>::at( size_type pos ) const
 	{
 		if (!(pos < size()))
 		{
@@ -218,37 +219,37 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::reference Vector<T, Alloc>::operator[]( size_type pos )
+	typename Vector<T, Alloc>::reference Vector<T, Alloc>::operator[]( size_type pos )
 	{
 		return (v_arr[pos]);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_reference Vector<T, Alloc>::operator[]( size_type pos ) const
+	typename Vector<T, Alloc>::const_reference Vector<T, Alloc>::operator[]( size_type pos ) const
 	{
 		return (v_arr[pos]);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::reference Vector<T, Alloc>::front()
+	typename Vector<T, Alloc>::reference Vector<T, Alloc>::front()
 	{
 		return (v_arr[0]);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_reference Vector<T, Alloc>::front() const
+	typename Vector<T, Alloc>::const_reference Vector<T, Alloc>::front() const
 	{
 		return (v_arr[0]);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::reference Vector<T, Alloc>::back()
+	typename Vector<T, Alloc>::reference Vector<T, Alloc>::back()
 	{
 		return (v_arr[size - 1]);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_reference Vector<T, Alloc>::back() const
+	typename Vector<T, Alloc>::const_reference Vector<T, Alloc>::back() const
 	{
 		return (v_arr[size - 1]);
 	}
@@ -266,27 +267,27 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::iterator Vector<T, Alloc>::begin()
+	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::begin()
 	{
-		return (iterator(v_arr[0]));
+		return (iterator(&v_arr[0]));
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_iterator Vector<T, Alloc>::begin() const
+	typename Vector<T, Alloc>::const_iterator Vector<T, Alloc>::begin() const
 	{
-		return (iterator(v_arr[0]));
+		return (iterator(&v_arr[0]));
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::iterator Vector<T, Alloc>::end()
+	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::end()
 	{
-		return (iterator(v_arr[v_size - 1]));
+		return (iterator(&v_arr[v_size]));
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::const_iterator Vector<T, Alloc>::end() const
+	typename Vector<T, Alloc>::const_iterator Vector<T, Alloc>::end() const
 	{
-		return (iterator(v_arr[v_size - 1]));
+		return (iterator(&v_arr[v_size]));
 	}
 
 	template < class T, class Alloc >
@@ -299,13 +300,13 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::size_type Vector<T, Alloc>::size() const
+	typename Vector<T, Alloc>::size_type Vector<T, Alloc>::size() const
 	{
 		return (v_size);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::size_type Vector<T, Alloc>::max_size() const
+	typename Vector<T, Alloc>::size_type Vector<T, Alloc>::max_size() const
 	{
 		return (v_alloc.max_size());
 	}
@@ -313,7 +314,7 @@ namespace ft
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::reserve( size_type new_cap )
 	{
-		pointer *tmp;
+		pointer tmp;
 
 		if (new_cap > v_alloc.max_size())
 			throw (std::length_error("std::length_error"));
@@ -324,14 +325,14 @@ namespace ft
 		{
 			tmp[i] = v_arr[i];
 		}
-		v_alloc.destroy(v_arr);
-		v_alloc.deallocate(v_arr);
+	//	v_alloc.destroy(v_arr);
+	//	v_alloc.deallocate(v_arr);
 		v_arr = tmp;
 		v_capacity = new_cap;
  	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::size_type Vector<T, Alloc>::capacity() const
+	typename Vector<T, Alloc>::size_type Vector<T, Alloc>::capacity() const
 	{
 		return (v_capacity);
 	}
@@ -339,7 +340,7 @@ namespace ft
 	template < class T, class Alloc >//////////
 	void Vector<T, Alloc>::clear()
 	{
-		alloc.destroy();
+		v_alloc.destroy();
 		for (; v_size > 0; v_size--)
 		{
 			v_arr[v_size] = 0;
@@ -347,9 +348,12 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::iterator Vector<T, Alloc>::insert( iterator pos, const T& value )
+	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::insert( iterator pos, const T& value )
 	{
+		std::cout << value << std::endl;
 		insert(pos, 1, value);
+
+		return (pos);
 	}
 
 	template < class T, class Alloc >
@@ -358,7 +362,7 @@ namespace ft
 		iterator	iter;
 		size_type	idx;
 		size_type	tmp_idx;
-		pointer		*tmp;
+		pointer		tmp;
 
 		idx = 0;
 		tmp_idx = 0;
@@ -367,16 +371,16 @@ namespace ft
 			reserve(v_capacity + count);    //pos의 위치가 reserve 하고나서도 유효한가?
 		}
 		tmp = v_alloc.allocate(v_size + count);
-		for (int i = 0; i < v_size + count)
+		for (size_type i = 0; i < v_size + count; i++)
 		{
 			tmp[i] = v_arr[i];
 		}
 		iter = this->begin();
 		while (iter++ != pos)
 		{
-			v_arr[idx++] = tmp[tmp_idx++]
+			v_arr[idx++] = tmp[tmp_idx++];
 		}
-		for (int i = 0; i < count; i++)
+		for (size_type i = 0; i < count; i++)
 		{
 			v_arr[idx++] = value;
 		}
@@ -389,7 +393,7 @@ namespace ft
 
 	template< class T, class  Alloc>
 	template <class InputIterator>
-	void Vector<T, Alloc>::insert( iterator pos, InputIterator first, InputIterator last )
+	void Vector<T, Alloc>::insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*  )
 	{
 		iterator	iter;
 		size_type	idx;
@@ -403,14 +407,14 @@ namespace ft
 			reserve(v_capacity + last - first);
 		}
 		tmp = v_alloc.allocate(v_size + last - first);
-		for (int i = 0; i < v_size + last - first)
+		for (int i = 0; i < v_size + last - first; i++)
 		{
 			tmp[i] = v_arr[i];
 		}
 		iter = this->begin();
 		while (iter++ != pos)
 		{
-			v_arr[idx++] = tmp[tmp_idx++]
+			v_arr[idx++] = tmp[tmp_idx++];
 		}
 		while (first != last)
 		{
@@ -420,7 +424,7 @@ namespace ft
 		{
 			v_arr[idx++] = tmp[tmp_idx++];
 		}
-		v_size = v_size + count;
+		v_size = v_size + first - last;
 	}
 /*
 	template < class T, class Alloc >

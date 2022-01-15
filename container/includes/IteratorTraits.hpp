@@ -5,6 +5,12 @@
 
 namespace ft
 {
+	struct input_iterator_tag  {};
+	struct output_iterator_tag {};
+	struct forward_iterator_tag       : public input_iterator_tag         {};
+	struct bidirectional_iterator_tag : public forward_iterator_tag       {};
+	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+
 	template<class Iterator>
 	struct iterator_traits
 	{
@@ -14,8 +20,18 @@ namespace ft
 		typedef typename Iterator::reference reference;
 		typedef typename Iterator::iterator_category iterator_category;
 	};
+
 	template<class T>
-	struct iterator_traits<T*>
+	struct iterator_traits<T*> //: public bidirectional_iterator_tag
+	{
+		typedef ptrdiff_t difference_type;
+		typedef T value_type;
+		typedef T* pointer;
+		typedef T& reference;
+		typedef random_access_iterator_tag iterator_category;
+	};
+/*	template<class T>
+	struct i_iterator_traits<T*>
 	{
 		typedef ptrdiff_t difference_type;
 		typedef T value_type;
@@ -24,7 +40,7 @@ namespace ft
 		typedef input_iterator_tag iterator_category;
 	};
 	template<class T>
-	struct iterator_traits<T*>
+	struct o_iterator_traits<T*>
 	{
 		typedef ptrdiff_t difference_type;
 		typedef T value_type;
@@ -34,7 +50,7 @@ namespace ft
 	};
 
 	template<class T>
-	struct iterator_traits<T*> : public input_iterator_tag
+	struct f_iterator_traits<T*> : public input_iterator_tag
 	{
 		typedef ptrdiff_t difference_type;
 		typedef T value_type;
@@ -44,7 +60,7 @@ namespace ft
 	};
 
 	template<class T>
-	struct iterator_traits<T*> : public forward_iterator_tag
+	struct b_iterator_traits<T*> : public forward_iterator_tag
 	{
 		typedef ptrdiff_t difference_type;
 		typedef T value_type;
@@ -54,7 +70,7 @@ namespace ft
 	};
 
 	template<class T>
-	struct iterator_traits<T*> : public bidirectional_iterator_tag
+	struct iterator_traits<T*> //: public bidirectional_iterator_tag
 	{
 		typedef ptrdiff_t difference_type;
 		typedef T value_type;
@@ -62,181 +78,7 @@ namespace ft
 		typedef T& reference;
 		typedef random_access_iterator_tag iterator_category;
 	};
-/*
-	struct input_iterator_tag  {};
-	struct output_iterator_tag {};
-	struct forward_iterator_tag       : public input_iterator_tag         {};
-	struct bidirectional_iterator_tag : public forward_iterator_tag       {};
-	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-*/
-	template<class IterT>
-	class Iterator
-	{
-		protected:
-   			typedef iterator_traits<IterT>							traits_type;
-
-		public:
-			typedef IterT											iterator_type;
-			typedef typename traits_type::iterator_category			iterator_category;
-			typedef typename traits_type::value_type				value_type;
-			typedef typename traits_type::difference_type			difference_type;
-			typedef typename traits_type::reference					reference;
-			typedef typename traits_type::pointer					pointer;
-
-		private:
-			pointer	ptr;
-
-		public:
-			Iterator() : ptr(0) {};
-			Iterator(pointer p) : ptr(p) {};
-			Iterator(Iterator const &tmp) : ptr(tmp.ptr) {};
-			Iterator &operator=(Iterator const &tmp);
-			~Iterator() {};
-			Iterator &operator++();
-			Iterator operator++(int);
-			bool operator==(Iterator const &tmp);
-			bool operator!=(Iterator const &tmp);
-			reference operator*();
-			pointer operator->();
-			Iterator &operator--();
-			Iterator operator--(int);
-			Iterator &operator+(int n);
-			Iterator &operator-(int n);
-			bool operator<(Iterator const &tmp);
-			bool operator>(Iterator const &tmp);
-			bool operator<=(Iterator const &tmp);
-			bool operator>=(Iterator const &tmp);
-			Iterator &operator+=(int n);
-			Iterator &operator-=(int n);
-			reference operator[](int n);
-	};
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator=(Iterator const &tmp)
-	{
-		if (this != &tmp)
-		{
-			ptr = tmp.ptr;
-		}
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator++()
-	{
-		ptr = ptr + 1;
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T> Iterator<T>::operator++(int)
-	{
-		Iterator tmp;
-
-		ptr = ptr + 1;
-		return (tmp);
-	}
-
-	template<class T>
-	bool Iterator<T>::operator==(Iterator const &tmp)
-	{
-		return (ptr == tmp.ptr)
-	}
-
-	template<class T>
-	bool Iterator<T>::operator!=(Iterator const &tmp)
-	{
-		return (ptr != tmp.ptr)
-	}
-
-	template<class T>
-	Iterator<T>::reference Iterator<T>::operator*()
-	{
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T>::pointer Iterator<T>::operator->()
-	{
-		return (this);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator--()
-	{
-		ptr = ptr - 1;
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T> Iterator<T>::operator--(int)
-	{
-		Iterator tmp;
-
-		ptr = ptr - 1;
-		return (tmp);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator+(int n)
-	{
-		Iterator tmp;
-
-		tmp = this + n;
-		return (*tmp);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator-(int n)
-	{
-		Iterator tmp;
-
-		tmp = this - n;
-		return (*tmp);
-	}
-
-	template<class T>
-	bool Iterator<T>::operator<(Iterator const &tmp)
-	{
-		return (ptr < tmp.ptr);
-	}
-
-	template<class T>
-	bool Iterator<T>::operator>(Iterator const &tmp)
-	{
-		return (ptr > tmp.ptr);
-	}
-
-	template<class T>
-	bool Iterator<T>::operator<=(Iterator const &tmp)
-	{
-		return (ptr <= tmp.ptr);
-	}
-
-	template<class T>
-	bool Iterator<T>::operator>=(Iterator const &tmp)
-	{
-		return (ptr >= tmp.ptr);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator+=(int n)
-	{
-		this = this + n;
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T> &Iterator<T>::operator-=(int n)
-	{
-		this = this - n;
-		return (*this);
-	}
-
-	template<class T>
-	Iterator<T>::reference Iterator<T>::operator[](int n)
-	{
-		return (*(this + n))
-	}
+	*/
 }
+
 #endif
