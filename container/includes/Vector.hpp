@@ -81,14 +81,13 @@ namespace ft
 			void insert( iterator pos, size_type count, const T& value );
 			template <class InputIterator>
 			void insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
-	/*		iterator erase( iterator pos );
+			iterator erase( iterator pos );
 			iterator erase (iterator first, iterator last);
 			void push_back( const T& value );
 			void pop_back();
-			void resize( size_type count );
 			void resize( size_type count, T value = T() );
 			void swap( Vector& other );
-*/
+
 			//Non-member functions
 			//template< class T, class Alloc >
 			//bool operator==( const Vector<T, Alloc>& lhs, const Vector<T, Alloc>& rhs );
@@ -350,9 +349,8 @@ namespace ft
 	template < class T, class Alloc >
 	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::insert( iterator pos, const T& value )
 	{
-		std::cout << value << std::endl;
-		insert(pos, 1, value);
 
+		insert(pos, 1, value);
 		return (pos);
 	}
 
@@ -376,17 +374,19 @@ namespace ft
 			tmp[i] = v_arr[i];
 		}
 		iter = this->begin();
-		while (iter++ != pos)
+		while (iter != pos)
 		{
 			v_arr[idx++] = tmp[tmp_idx++];
+			iter++;
 		}
 		for (size_type i = 0; i < count; i++)
 		{
 			v_arr[idx++] = value;
 		}
-		while (iter++ != this->end())
+		while (iter != this->end())
 		{
 			v_arr[idx++] = tmp[tmp_idx++];
+			iter++;
 		}
 		v_size = v_size + count;
 	}
@@ -426,54 +426,82 @@ namespace ft
 		}
 		v_size = v_size + first - last;
 	}
-/*
-	template < class T, class Alloc >
-	Vector<T, Alloc>::iterator Vector<T, Alloc>::erase( iterator pos )
-	{
 
+	template < class T, class Alloc >
+	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::erase( iterator pos )
+	{
+		iterator iter;
+
+		iter = pos;
+		while (iter != this.end())
+		{
+			*iter = *iter + 1;
+			iter++;
+		}
+		v_size = v_size - 1;
+		return (pos);
 	}
 
 	template < class T, class Alloc >
-	Vector<T, Alloc>::iterator Vector<T, Alloc>::erase (iterator first, iterator last)
+	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::erase (iterator first, iterator last)
 	{
+		iterator iter;
 
+		iter = last;
+		while (iter != this.end())  //last 이후에 남은 값이 덮은 양보다 적으면 범위내 값이 남아있음
+		{
+			*iter = *iter + 1;
+			iter++;
+		}
+		v_size = v_size - (last - first);
 	}
 
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::push_back( const T& value )
 	{
+		iterator iter;
 
+		if (v_size == v_capacity)
+			reserve(v_capacity * 2);
+		iter = this.end();
+		*iter = value;
+		v_size = v_size + 1;
 	}
 
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::pop_back()
 	{
-
+		v_size = v_size - 1;
 	}
 
 	template < class T, class Alloc >
-	void Vector<T, Alloc>::resize( size_type count )
+	void Vector<T, Alloc>::resize( size_type count, T value)
 	{
-		if (size > count)
+		size_type idx;
+
+		idx = v_size;
+		if (v_size > count)
+			v_size = count;
+		else if (count > v_size)
 		{
-
+			if (count > v_capacity)
+				reserve(count + 4);
+			while (idx < count - v_size)
+			{
+				v_arr[idx++] = value;
+			}
 		}
-	}
-
-	template < class T, class Alloc >
-	void Vector<T, Alloc>::resize( size_type count, T value = T() )
-	{
-
+		v_size = count;
 	}
 
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::swap( Vector& other )
 	{
-		std::swap(arr, other.arr);
-		std::swap(size, other.size);
-		std::swap(capacity, other.capacity);
+		std::swap(v_arr, other.v_arr);
+		std::swap(v_size, other.v_size);
+		std::swap(v_capacity, other.v_capacity);
 	}
-*/
+
 };
 
 #endif

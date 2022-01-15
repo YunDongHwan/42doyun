@@ -69,6 +69,7 @@ namespace ft
 	{
 		Iterator tmp;
 
+		tmp = *this;
 		ptr = ptr + 1;
 		return (tmp);
 	}
