@@ -6,7 +6,7 @@
 namespace ft
 {
 	template<class T>
-	class Iterator
+	class VectorIterator
 	{
 		protected:
    			typedef iterator_traits<T*>								traits_type;
@@ -23,33 +23,40 @@ namespace ft
 			pointer	ptr;
 
 		public:
-			Iterator() : ptr(0) {};
-			Iterator(pointer p) : ptr(p) {};
-			Iterator(Iterator const &tmp) : ptr(tmp.ptr) {};
-			Iterator &operator=(Iterator const &tmp);
-			~Iterator() {};
-			Iterator &operator++();
-			Iterator operator++(int);
-			bool operator==(Iterator const &tmp);
-			bool operator!=(Iterator const &tmp);
+			VectorIterator() : ptr(0) {};
+			VectorIterator(pointer p) : ptr(p) {};
+			VectorIterator(VectorIterator const &tmp) : ptr(tmp.ptr) {};
+			VectorIterator &operator=(VectorIterator const &tmp);
+			~VectorIterator() {};
+			VectorIterator &operator++();
+			VectorIterator operator++(int);
+			bool operator==(VectorIterator const &tmp);
+			bool operator!=(VectorIterator const &tmp);
 			reference operator*();
 			pointer operator->();
-			Iterator &operator--();
-			Iterator operator--(int);
-			Iterator operator+(int n) const;
-			Iterator operator-(int n) const;
-			bool operator<(Iterator const &tmp);
-			bool operator>(Iterator const &tmp);
-			bool operator<=(Iterator const &tmp);
-			bool operator>=(Iterator const &tmp);
-			Iterator &operator+=(int n);
-			Iterator &operator-=(int n);
+			VectorIterator &operator--();
+			VectorIterator operator--(int);
+			VectorIterator operator+(int n) const;
+			VectorIterator operator-(int n) const;
+			bool operator<(VectorIterator const &tmp);
+			bool operator>(VectorIterator const &tmp);
+			bool operator<=(VectorIterator const &tmp);
+			bool operator>=(VectorIterator const &tmp);
+			VectorIterator &operator+=(int n);
+			VectorIterator &operator-=(int n);
 			reference operator[](int n);
 			pointer get_ptr();
+			operator VectorIterator<const T>() const;
 	};
 
 	template<class T>
-	Iterator<T> &Iterator<T>::operator=(Iterator const &tmp)
+	VectorIterator<T>::operator VectorIterator<const T>() const
+	{
+		return (VectorIterator<const T>(ptr));
+	}
+
+	template<class T>
+	VectorIterator<T> &VectorIterator<T>::operator=(VectorIterator const &tmp)
 	{
 		if (this != &tmp)
 		{
@@ -59,16 +66,16 @@ namespace ft
 	}
 
 	template<class T>
-	Iterator<T> &Iterator<T>::operator++()
+	VectorIterator<T> &VectorIterator<T>::operator++()
 	{
 		ptr = ptr + 1;
 		return (*this);
 	}
 
 	template<class T>
-	Iterator<T> Iterator<T>::operator++(int)
+	VectorIterator<T> VectorIterator<T>::operator++(int)
 	{
-		Iterator tmp;
+		VectorIterator tmp;
 
 		tmp.ptr = this->ptr;
 		ptr = ptr + 1;
@@ -76,40 +83,40 @@ namespace ft
 	}
 
 	template<class T>
-	bool Iterator<T>::operator==(Iterator const &tmp)
+	bool VectorIterator<T>::operator==(VectorIterator const &tmp)
 	{
 		return (ptr == tmp.ptr);
 	}
 
 	template<class T>
-	bool Iterator<T>::operator!=(Iterator const &tmp)
+	bool VectorIterator<T>::operator!=(VectorIterator const &tmp)
 	{
 		return (ptr != tmp.ptr);
 	}
 
 	template<class T>
-	typename Iterator<T>::reference Iterator<T>::operator*()
+	typename VectorIterator<T>::reference VectorIterator<T>::operator*()
 	{
 		return (*ptr);
 	}
 
 	template<class T>
-	typename Iterator<T>::pointer Iterator<T>::operator->()
+	typename VectorIterator<T>::pointer VectorIterator<T>::operator->()
 	{
 		return (ptr);
 	}
 
 	template<class T>
-	Iterator<T> &Iterator<T>::operator--()
+	VectorIterator<T> &VectorIterator<T>::operator--()
 	{
 		ptr = ptr - 1;
 		return (*this);
 	}
 
 	template<class T>
-	Iterator<T> Iterator<T>::operator--(int)
+	VectorIterator<T> VectorIterator<T>::operator--(int)
 	{
-		Iterator tmp;
+		VectorIterator tmp;
 
 		tmp.ptr = this->ptr;
 		ptr = ptr - 1;
@@ -117,72 +124,69 @@ namespace ft
 	}
 
 	template<class T>
-	Iterator<T> Iterator<T>::operator+(int n) const
+	VectorIterator<T> VectorIterator<T>::operator+(int n) const
 	{
-		return (Iterator(this->ptr + n));
+		return (VectorIterator(this->ptr + n));
 	}
 
 	template<class T>
-	Iterator<T> operator+(long long int n, Iterator<T> iter)
+	VectorIterator<T> operator+(long long int n, VectorIterator<T> iter) //no member
 	{
-		return (Iterator<T>(iter.get_ptr() + n));
+		return (VectorIterator<T>(iter.get_ptr() + n));
 	}
 
 	template<class T>
-	Iterator<T> Iterator<T>::operator-(int n) const
+	VectorIterator<T> VectorIterator<T>::operator-(int n) const
 	{
-		Iterator tmp;
-
-		tmp = this - n;
-		return (*tmp);
+		return (VectorIterator(this->ptr - n));
 	}
 
 	template<class T>
-	bool Iterator<T>::operator<(Iterator const &tmp)
+	bool VectorIterator<T>::operator<(VectorIterator const &tmp)
 	{
 		return (ptr < tmp.ptr);
 	}
 
 	template<class T>
-	bool Iterator<T>::operator>(Iterator const &tmp)
+	bool VectorIterator<T>::operator>(VectorIterator const &tmp)
 	{
 		return (ptr > tmp.ptr);
 	}
 
 	template<class T>
-	bool Iterator<T>::operator<=(Iterator const &tmp)
+	bool VectorIterator<T>::operator<=(VectorIterator const &tmp)
 	{
 		return (ptr <= tmp.ptr);
 	}
 
 	template<class T>
-	bool Iterator<T>::operator>=(Iterator const &tmp)
+	bool VectorIterator<T>::operator>=(VectorIterator const &tmp)
 	{
 		return (ptr >= tmp.ptr);
 	}
 
 	template<class T>
-	Iterator<T> &Iterator<T>::operator+=(int n)
+	VectorIterator<T> &VectorIterator<T>::operator+=(int n)
 	{
-		this = this + n;
+		this->ptr = this->ptr + n;
 		return (*this);
 	}
 
 	template<class T>
-	Iterator<T> &Iterator<T>::operator-=(int n)
+	VectorIterator<T> &VectorIterator<T>::operator-=(int n)
 	{
-		this = this - n;
+		this->ptr = this->ptr - n;
 		return (*this);
 	}
 
 	template<class T>
-	typename Iterator<T>::reference Iterator<T>::operator[](int n)
+	typename VectorIterator<T>::reference VectorIterator<T>::operator[](int n)
 	{
-		return (*(this + n));
+		return (*(this->ptr + n));
 	}
 
 	template<class T>
-	typename Iterator<T>::pointer Iterator<T>::get_ptr()
+	typename VectorIterator<T>::pointer VectorIterator<T>::get_ptr()
 	{
 		return (ptr);
 	}

@@ -1,7 +1,7 @@
 #ifndef REBERSEITERATOR_HPP
 # define REBERSEITERATOR_HPP
 
-# include "Identifies.hpp"
+//# include "Identifies.hpp"
 # include "IteratorTraits.hpp"
 
 namespace ft
@@ -116,7 +116,7 @@ namespace ft
 	}
 
 	template<class T>
-	ReverseIterator<T> operator+(typename ReverseIterator<T>::difference_type n, ReverseIterator<T> iter)
+	ReverseIterator<T> operator+(typename ReverseIterator<T>::difference_type n, ReverseIterator<T> iter) //no member
 	{
 		return (ReverseIterator<T>(iter.get_ptr() + n));
 	}
