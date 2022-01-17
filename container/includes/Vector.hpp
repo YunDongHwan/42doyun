@@ -1,11 +1,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <iostream>
-# include <memory>
-# include "VectorIterator.hpp"
-# include "Identifies.hpp"
-
+# include "container.hpp"
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
@@ -22,8 +18,8 @@ namespace ft
 			typedef typename Alloc::const_pointer const_pointer;
 			typedef Iterator<T> iterator;
 			typedef const Iterator<T> const_iterator;
-		//	typedef reverse_iterator<iterator> reverse_iterator;
-		//	typedef reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef ReverseIterator<iterator> reverse_iterator;
+			typedef ReverseIterator<const_iterator> const_reverse_iterator;
 
 		private:
 			pointer v_arr;
@@ -65,8 +61,10 @@ namespace ft
 			const_iterator begin() const;
 			iterator end();
 			const_iterator end() const;
-		//	reverse_iterator rbegin();
-		//	reverse_iterator rend();
+			reverse_iterator rbegin();
+			const_reverse_iterator rbegin() const;
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;
 
 			//Capacity
 			bool empty() const;
@@ -290,6 +288,30 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
+	typename Vector<T, Alloc>::reverse_iterator Vector<T, Alloc>::rbegin()
+	{
+		return (reverse_iterator(&v_arr[v_size - 1]));
+	}
+
+	template < class T, class Alloc >
+	typename Vector<T, Alloc>::const_reverse_iterator Vector<T, Alloc>::rbegin() const
+	{
+		return (const_reverse_iterator(&v_arr[v_size - 1]));
+	}
+
+	template < class T, class Alloc >
+	typename Vector<T, Alloc>::reverse_iterator Vector<T, Alloc>::rend()
+	{
+		return (reverse_iterator(this->begin() - 1));
+	}
+
+	template < class T, class Alloc >
+	typename Vector<T, Alloc>::const_reverse_iterator Vector<T, Alloc>::rend() const
+	{
+		return (const_reverse_iterator(this->begin() - 1));
+	}
+
+	template < class T, class Alloc >
  	bool Vector<T, Alloc>::empty() const
 	{
 		if (v_size == 0)
@@ -339,17 +361,20 @@ namespace ft
 	template < class T, class Alloc >//////////
 	void Vector<T, Alloc>::clear()
 	{
-		v_alloc.destroy();
-		for (; v_size > 0; v_size--)
+		iterator iter;
+
+		iter = this->begin();
+		while (iter != this->end())
 		{
-			v_arr[v_size] = 0;
+			v_alloc.destroy(iter.get_ptr());
+			iter++;
 		}
+		v_size = 0;
 	}
 
 	template < class T, class Alloc >
 	typename Vector<T, Alloc>::iterator Vector<T, Alloc>::insert( iterator pos, const T& value )
 	{
-
 		insert(pos, 1, value);
 		return (pos);
 	}
@@ -433,9 +458,9 @@ namespace ft
 		iterator iter;
 
 		iter = pos;
-		while (iter != this.end())
+		while (iter != this->end())
 		{
-			*iter = *iter + 1;
+			*iter = *(iter + 1);
 			iter++;
 		}
 		v_size = v_size - 1;
@@ -448,9 +473,9 @@ namespace ft
 		iterator iter;
 
 		iter = last;
-		while (iter != this.end())  //last 이후에 남은 값이 덮은 양보다 적으면 범위내 값이 남아있음
+		while (iter != this->end())  //last 이후에 남은 값이 덮은 양보다 적으면 범위내 값이 남아있음
 		{
-			*iter = *iter + 1;
+			iter = iter + 1;
 			iter++;
 		}
 		v_size = v_size - (last - first);
@@ -463,7 +488,7 @@ namespace ft
 
 		if (v_size == v_capacity)
 			reserve(v_capacity * 2);
-		iter = this.end();
+		iter = this->end();
 		*iter = value;
 		v_size = v_size + 1;
 	}

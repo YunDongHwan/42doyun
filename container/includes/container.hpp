@@ -1,7 +1,11 @@
 #ifndef CONTAINER_HPP
 # define CONTAINER_HPP
 
-# include "Vector.hpp"
+# include <iostream>
+# include <memory>
 # include "VectorIterator.hpp"
+# include "Identifies.hpp"
+# include "ReverseIterator.hpp"
+# include "Vector.hpp"
 
 #endif
