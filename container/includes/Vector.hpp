@@ -98,7 +98,7 @@ namespace ft
 	template < class T, class Alloc >
 	Vector<T, Alloc>::Vector()
 	{
-		v_arr = NULL;
+		v_arr = v_alloc.allocate(0);
 		v_size = 0;
 		v_capacity = 0;
 	}
@@ -106,27 +106,34 @@ namespace ft
 	template < class T, class Alloc >
 	Vector<T, Alloc>::Vector(size_type count)
 	{
-		v_size = count;
-		v_capacity = v_size + 4;
-		assign(v_capacity);
+		v_arr = v_alloc.allocate(count);
+		v_size = 0;
+		v_capacity = count;
 	}
 
 	template < class T, class Alloc >
 	Vector<T, Alloc>::Vector(size_type count, value_type value)
 	{
-		v_size = count;
+		v_arr = v_alloc.allocate(count);
+		v_size = 0;
 		v_capacity = v_size + 4;
-		assign(v_capacity, value);
-
+		while (count--)
+		{
+			push_back(value);
+		}
 	}
 
 	template<class T, class Alloc>
 	template <class InputIterator>
     Vector<T, Alloc>::Vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
 	{
-		v_size = last - first;
-		v_capacity = v_size + 4;
-		assign(first, last);
+		v_arr = v_alloc.allocate(4);
+		v_size = 0;
+		v_capacity = 4;
+		while (first != last)
+		{
+			push_back(*first++);
+		}
 	}
 
 	template < class T, class Alloc >
@@ -156,6 +163,8 @@ namespace ft
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::assign( size_type count)
 	{
+		if (v_arr)
+			v_alloc.deallocate(v_arr, v_capacity);
 		v_arr = v_alloc.allocate(count);
 		for (size_type i = 0; i < v_size; i++)
 		{
@@ -166,6 +175,8 @@ namespace ft
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::assign (size_type count, const value_type& value)
 	{
+		if (v_arr)
+			v_alloc.deallocate(v_arr, v_capacity);
 		v_arr = v_alloc.allocate(count);
 		for (size_type i = 0; i < v_size; i++)
 		{
@@ -177,10 +188,10 @@ namespace ft
 	template <class InputIterator>
  	void Vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
 	{
-		v_arr = v_alloc.allocate(v_capacity);
-		for (size_type i = 0; first != last; first++)
+		clear();
+		while (first != last)
 		{
-			v_alloc.construct(v_arr[i++], *first);
+			push_back(*first++);
 		}
 	}
 
@@ -275,7 +286,6 @@ namespace ft
 	template < class T, class Alloc >
 	typename Vector<T, Alloc>::const_iterator Vector<T, Alloc>::begin() const
 	{
-		std::cout << "dd" << std::endl;
 		return (iterator(&v_arr[0]));
 	}
 
@@ -424,36 +434,54 @@ namespace ft
 	template <class InputIterator>
 	void Vector<T, Alloc>::insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*  )
 	{
-		iterator	iter;
-		size_type	idx;
-		size_type	tmp_idx;
-		pointer		*tmp;
+		iterator	tmp;
+		iterator	tmp2;
+		int			count;
+		int			idx;
 
+		count = 0;
 		idx = 0;
-		tmp_idx = 0;
-		if (v_capacity - v_size < last - first)
+		tmp2 = first;
+		while (tmp2++ != last)
 		{
-			reserve(v_capacity + last - first);
+			count++;
 		}
-		tmp = v_alloc.allocate(v_size + last - first);
-		for (int i = 0; i < v_size + last - first; i++)
+		if (v_capacity - v_size < count)
 		{
-			tmp[i] = v_arr[i];
+			reserve(v_capacity + count);
 		}
-		iter = this->begin();
-		while (iter++ != pos)
+		tmp = v_alloc.allocate(v_size + count);
+		for (iterator i = this->begin(); i != pos; i++)
 		{
-			v_arr[idx++] = tmp[tmp_idx++];
+			*(tmp.ptr) = v_arr[idx++];
+			tmp++;
 		}
 		while (first != last)
 		{
-			v_arr[idx++] = *first++;
+			tmp++ = first++;
 		}
-		while (iter++ != this->end())
+		while (tmp != this->end())
 		{
-			v_arr[idx++] = tmp[tmp_idx++];
+			*(tmp.ptr) = v_arr[idx++];
+			tmp++;
 		}
-		v_size = v_size + first - last;
+		v_size = v_size + count;
+
+
+		// iter = this->begin();
+		// while (iter++ != pos)
+		// {
+		// 	v_arr[idx++] = tmp[tmp_idx++];
+		// }
+		// while (first != last)
+		// {
+		// 	v_arr[idx++] = *first++;
+		// }
+		// while (iter++ != this->end())
+		// {
+		// 	v_arr[idx++] = tmp[tmp_idx++];
+		// }
+		// v_size = v_size + first - last;
 	}
 
 	template < class T, class Alloc >
@@ -480,10 +508,9 @@ namespace ft
 		iter = last;
 		while (iter != this->end())  //last 이후에 남은 값이 덮은 양보다 적으면 범위내 값이 남아있음
 		{
-			iter = iter + 1;
-			iter++;
+			first++ = ++iter;
+			v_size--;
 		}
-		v_size = v_size - (last - first);
 	}
 
 	template < class T, class Alloc >
