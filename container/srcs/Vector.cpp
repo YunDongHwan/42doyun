@@ -1,17 +1,55 @@
-#include "../includes/Vector.hpp"
+#include "../includes/vector.hpp"
 #include <vector>
 
 int	main()
 {
-	//std::vector<int> test(3, 3);
-	//std::vector<int>::iterator it;
+	std::vector<int> vtest;
+	vtest.push_back(1);
+	vtest.push_back(2);
+	vtest.push_back(3);
+	vtest.push_back(4);
+	vtest.push_back(5);
+	std::vector<int>::iterator vit;
+	vit = vtest.end();
+	std::vector<int>::reverse_iterator vrit(vit);
+	std::vector<int>::const_reverse_iterator vcrit(vrit);
+	std::cout << "vn :" << *vcrit << std::endl;
 
-	ft::Vector<int> test(5, 3);
-	ft::Vector<int> test2(3, 1);
-	ft::Vector<int>::iterator it;
 
-	//ft::Vector<int>::const_iterator cit;
-	it = test.begin();
+	std::vector<int>::const_iterator vcit;
+	vcit = vtest.end();
+
+	std::vector<int>::const_reverse_iterator vcrit2(vcit);
+	std::cout << "vc :" << *vcrit2 << std::endl;
+
+	std::cout << "----------------------------------------------\n";
+
+	ft::vector<int> test;
+	test.push_back(1);
+	test.push_back(2);
+	test.push_back(3);
+	test.push_back(4);
+	test.push_back(5);
+
+	ft::vector<int> test2(3, 1);
+	ft::vector<int>::iterator it;
+
+	it = test.end();
+	//it++;
+	ft::vector<int>::reverse_iterator rit(it);
+
+	ft::vector<int>::const_reverse_iterator crit(rit);
+	std::cout << "nomal iterator : " << *crit << std::endl;
+
+
+	ft::vector<int>::const_iterator cit;
+	cit = test.end();
+
+	ft::vector<int>::reverse_iterator rit(it);
+	ft::vector<int>::const_reverse_iterator crit(rit);
+	std::cout << "const iterator : " << *vcrit << std::endl;
+
+
 
 
 	for (it = test.begin(); it != test.end(); it++)
