@@ -7,7 +7,7 @@ int	main()
 	//std::vector<int>::iterator it;
 	ft::Vector<int> test(5, 3);
 	ft::Vector<int> test2(3, 1);
-	ft::Vector<int>::const_iterator it;
+	ft::Vector<int>::iterator it;
 	//ft::Vector<int>::const_iterator cit;
 	it = test.begin();
 

@@ -79,13 +79,10 @@ namespace ft
 			//Modifiers
 			void clear();
 			iterator insert( iterator pos, const T& value );
-			const_iterator insert( const_iterator pos, const T& value );
 			void insert( iterator pos, size_type count, const T& value );
-			void insert( const_iterator pos, size_type count, const T& value );
 			template <class InputIterator>
 			void insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
 			iterator erase( iterator pos );
-			const_iterator erase( iterator pos );
 			iterator erase (iterator first, iterator last);
 			void push_back( const T& value );
 			void pop_back();
@@ -387,53 +384,9 @@ namespace ft
 	}
 
 	template < class T, class Alloc >
-	typename Vector<T, Alloc>::const_iterator Vector<T, Alloc>::insert( const_iterator pos, const T& value )
-	{
-		insert(pos, 1, value);
-		return (pos);
-	}
-
-	template < class T, class Alloc >
 	void Vector<T, Alloc>::insert( iterator pos, size_type count, const T& value )
 	{
 		iterator	iter;
-		size_type	idx;
-		size_type	tmp_idx;
-		pointer		tmp;
-
-		idx = 0;
-		tmp_idx = 0;
-		if (v_capacity - v_size < count)
-		{
-			reserve(v_capacity + count);    //pos의 위치가 reserve 하고나서도 유효한가?
-		}
-		tmp = v_alloc.allocate(v_size + count);
-		for (size_type i = 0; i < v_size + count; i++)
-		{
-			tmp[i] = v_arr[i];
-		}
-		iter = this->begin();
-		while (iter != pos)
-		{
-			v_arr[idx++] = tmp[tmp_idx++];
-			iter++;
-		}
-		for (size_type i = 0; i < count; i++)
-		{
-			v_arr[idx++] = value;
-		}
-		while (iter != this->end())
-		{
-			v_arr[idx++] = tmp[tmp_idx++];
-			iter++;
-		}
-		v_size = v_size + count;
-	}
-
-	template < class T, class Alloc >
-	void Vector<T, Alloc>::insert( const_iterator pos, size_type count, const T& value )
-	{
-		const_iterator	iter;
 		size_type	idx;
 		size_type	tmp_idx;
 		pointer		tmp;
@@ -516,22 +469,6 @@ namespace ft
 		}
 		v_size = v_size - 1;
 		std::cout << "nomal erase" << std::endl;
-		return (pos);
-	}
-
-	template < class T, class Alloc >
-	typename Vector<T, Alloc>::const_iterator Vector<T, Alloc>::erase( iterator pos )
-	{
-		iterator iter;
-
-		iter = pos;
-		while (iter != this->end())
-		{
-			*iter = *(iter + 1);
-			iter++;
-		}
-		v_size = v_size - 1;
-		std::cout << "const erase" << std::endl;
 		return (pos);
 	}
 
