@@ -18,8 +18,13 @@ int	main()
 	{
 		std::cout << "constructor" << *it << std::endl;
 	}
-	it--;
-
+	test.assign(7,7);
+	test.erase(test.begin());
+	test.erase(--test.end());
+for (it = test.begin(); it != test.end(); it++)
+	{
+		std::cout << "assign " << *it << std::endl;
+	}
 	test.insert(it, 5);
 
 	std::cout << "it : " << *it << std::endl;
@@ -44,7 +49,7 @@ int	main()
 	++it;
 	//test2.insert(it, 77);
 	test2.swap(test);
-
+/*
 	for (ft::Vector<int>::iterator iter = test2.begin(); iter != test2.end(); iter++)
 	{
 		std::cout << "test2 : " << *iter << std::endl;
@@ -63,6 +68,6 @@ int	main()
 	}
 	std::cout << "front : " << test2.front() << std::endl;
 
-
+*/
 	return (0);
 }

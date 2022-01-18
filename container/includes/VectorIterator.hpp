@@ -38,6 +38,7 @@ namespace ft
 			VectorIterator operator--(int);
 			VectorIterator operator+(int n) const;
 			VectorIterator operator-(int n) const;
+			difference_type operator-(VectorIterator tmp) const;
 			bool operator<(VectorIterator const &tmp);
 			bool operator>(VectorIterator const &tmp);
 			bool operator<=(VectorIterator const &tmp);
@@ -139,6 +140,13 @@ namespace ft
 	VectorIterator<T> VectorIterator<T>::operator-(int n) const
 	{
 		return (VectorIterator(this->ptr - n));
+	}
+
+	template<class T>
+	typename VectorIterator<T>::difference_type VectorIterator<T>::operator-(VectorIterator tmp) const
+	{
+
+		return (this->ptr - tmp.get_ptr());
 	}
 
 	template<class T>

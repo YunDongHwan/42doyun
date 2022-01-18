@@ -37,13 +37,12 @@ namespace ft
 			Vector(size_type count);
 			Vector(size_type count, value_type value);
 			template <class InputIterator>
-			Vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
+			Vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0 );
 			Vector (const Vector& other);
 			Vector& operator= (const Vector& other);
-			void assign( size_type count);
 			void assign (size_type count, const value_type& value);
 			template <class InputIterator>
-			void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
+			void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0);
 			allocator_type get_allocator ( ) const;
 			~Vector();
 
@@ -81,7 +80,7 @@ namespace ft
 			iterator insert( iterator pos, const T& value );
 			void insert( iterator pos, size_type count, const T& value );
 			template <class InputIterator>
-			void insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* );
+			void insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0 );
 			iterator erase( iterator pos );
 			iterator erase (iterator first, iterator last);
 			void push_back( const T& value );
@@ -98,9 +97,9 @@ namespace ft
 	template < class T, class Alloc >
 	Vector<T, Alloc>::Vector()
 	{
-		v_arr = v_alloc.allocate(0);
+		v_arr = v_alloc.allocate(4);
 		v_size = 0;
-		v_capacity = 0;
+		v_capacity = 4;
 	}
 
 	template < class T, class Alloc >
@@ -151,34 +150,18 @@ namespace ft
 	template < class T, class Alloc >
 	Vector<T, Alloc>& Vector<T, Alloc>::operator=(const Vector& other)
 	{
-		Vector<T> vec;
-
-		this->v_alloc.destroy();
-		this->v_alloc.deallocate();
-		vec.assign(other.v_capacity);
-		vec.v_arr = other.v_arr;
-		return (vec);
-	}
-
-	template < class T, class Alloc >
-	void Vector<T, Alloc>::assign( size_type count)
-	{
-		if (v_arr)
-			v_alloc.deallocate(v_arr, v_capacity);
-		v_arr = v_alloc.allocate(count);
-		for (size_type i = 0; i < v_size; i++)
-		{
-			v_arr[i] = 0;
-		}
+		*this = other;
+		return (*this);
 	}
 
 	template < class T, class Alloc >
 	void Vector<T, Alloc>::assign (size_type count, const value_type& value)
 	{
-		if (v_arr)
-			v_alloc.deallocate(v_arr, v_capacity);
-		v_arr = v_alloc.allocate(count);
-		for (size_type i = 0; i < v_size; i++)
+		clear();
+		v_arr = v_alloc.allocate(count + 4);
+		v_size = count;
+		v_capacity = v_size + 4;
+		 for (size_type i = 0; i < v_size; i++)
 		{
 			v_arr[i] = value;
 		}
@@ -189,6 +172,7 @@ namespace ft
  	void Vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
 	{
 		clear();
+		v_capacity = last - first + 4;
 		while (first != last)
 		{
 			push_back(*first++);
@@ -436,8 +420,8 @@ namespace ft
 	{
 		iterator	tmp;
 		iterator	tmp2;
-		int			count;
-		int			idx;
+		size_type	count;
+		size_type	idx;
 
 		count = 0;
 		idx = 0;
@@ -453,7 +437,7 @@ namespace ft
 		tmp = v_alloc.allocate(v_size + count);
 		for (iterator i = this->begin(); i != pos; i++)
 		{
-			*(tmp.ptr) = v_arr[idx++];
+			*tmp = v_arr[idx++];
 			tmp++;
 		}
 		while (first != last)
@@ -462,7 +446,7 @@ namespace ft
 		}
 		while (tmp != this->end())
 		{
-			*(tmp.ptr) = v_arr[idx++];
+			*tmp = v_arr[idx++];
 			tmp++;
 		}
 		v_size = v_size + count;
@@ -490,13 +474,14 @@ namespace ft
 		iterator iter;
 
 		iter = pos;
+		if (iter == this->end())
+			return (pos);
 		while (iter != this->end())
 		{
 			*iter = *(iter + 1);
 			iter++;
 		}
 		v_size = v_size - 1;
-		std::cout << "nomal erase" << std::endl;
 		return (pos);
 	}
 
