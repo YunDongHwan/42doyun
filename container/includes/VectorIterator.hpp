@@ -20,23 +20,23 @@ namespace ft
 		public:
 			VectorIterator() : ptr(0) {};
 			VectorIterator(pointer p) : ptr(p) {};
-			VectorIterator &operator=(VectorIterator const &tmp);
+			VectorIterator &operator=(const VectorIterator &tmp);
 			~VectorIterator() {};
 			VectorIterator &operator++();
 			VectorIterator operator++(int);
-			bool operator==(VectorIterator<const T> const &tmp) const;
-			bool operator!=(VectorIterator<const T> const &tmp) const;
+			bool operator==(const VectorIterator<const T> &tmp) const;
+			bool operator!=(const VectorIterator<const T> &tmp) const;
 			reference operator*();
 			pointer operator->();
 			VectorIterator &operator--();
 			VectorIterator operator--(int);
 			VectorIterator operator+(int n) const;
 			VectorIterator operator-(int n) const;
-			difference_type operator-(VectorIterator const &tmp) const;
-			bool operator<(VectorIterator<const T> const &tmp) const;
-			bool operator>(VectorIterator<const T> const &tmp) const;
-			bool operator<=(VectorIterator<const T> const &tmp) const;
-			bool operator>=(VectorIterator<const T> const &tmp) const;
+			difference_type operator-(const VectorIterator &tmp) const;
+			bool operator<(const VectorIterator<const T> &tmp) const;
+			bool operator>(const VectorIterator<const T> &tmp) const;
+			bool operator<=(const VectorIterator<const T> &tmp) const;
+			bool operator>=(const VectorIterator<const T> &tmp) const;
 			VectorIterator &operator+=(int n);
 			VectorIterator &operator-=(int n);
 			reference operator[](int n);
@@ -51,10 +51,7 @@ namespace ft
 	template<class T>
 	VectorIterator<T> &VectorIterator<T>::operator=(VectorIterator const &tmp)
 	{
-		if (this != &tmp)
-		{
-			ptr = tmp.ptr;
-		}
+		ptr = tmp.get_ptr();
 		return (*this);
 	}
 	template<class T>
@@ -73,12 +70,12 @@ namespace ft
 		return (tmp);
 	}
 	template<class T>
-	bool VectorIterator<T>::operator==(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator==(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr == tmp.get_ptr());
 	}
 	template<class T>
-	bool VectorIterator<T>::operator!=(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator!=(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr != tmp.get_ptr());
 	}
@@ -128,22 +125,22 @@ namespace ft
 		return (this->ptr - tmp.get_ptr());
 	}
 	template<class T>
-	bool VectorIterator<T>::operator<(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator<(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr < tmp.get_ptr());
 	}
 	template<class T>
-	bool VectorIterator<T>::operator>(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator>(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr > tmp.get_ptr());
 	}
 	template<class T>
-	bool VectorIterator<T>::operator<=(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator<=(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr <= tmp.get_ptr());
 	}
 	template<class T>
-	bool VectorIterator<T>::operator>=(VectorIterator<const T> const &tmp) const
+	bool VectorIterator<T>::operator>=(const VectorIterator<const T> &tmp) const
 	{
 		return (ptr >= tmp.get_ptr());
 	}

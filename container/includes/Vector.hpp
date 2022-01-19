@@ -21,8 +21,8 @@ namespace ft
             typedef typename Alloc::const_pointer const_pointer;
             typedef VectorIterator<T> iterator;
             typedef VectorIterator<const T> const_iterator;
-            typedef ReverseIterator<iterator> reverse_iterator;
-            typedef ReverseIterator<const_iterator> const_reverse_iterator;
+            typedef ReverseIterator<T> reverse_iterator;
+            typedef ReverseIterator<const T> const_reverse_iterator;
         private:
             pointer v_arr;
             allocator_type v_alloc;
@@ -95,9 +95,10 @@ namespace ft
     template < class T, class Alloc >
     vector<T, Alloc>::vector(size_type count)
     {
-        v_arr = v_alloc.allocate(count);
-        v_size = 0;
-        v_capacity = count;
+        v_arr = v_alloc.allocate(count + 4);
+        v_size = count;
+		assign(count, 0);
+        v_capacity = count + 4;
     }
     template < class T, class Alloc >
     vector<T, Alloc>::vector(size_type count, value_type value)
@@ -251,22 +252,22 @@ namespace ft
     template < class T, class Alloc >
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
     {
-        return (reverse_iterator(&v_arr[v_size - 1]));
+        return (reverse_iterator(this->end()));
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const
     {
-        return (const_reverse_iterator(&v_arr[v_size - 1]));
+        return (const_reverse_iterator(this->end()));
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
     {
-        return (reverse_iterator(this->begin() - 1));
+        return (reverse_iterator(this->begin()));
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rend() const
     {
-        return (const_reverse_iterator(this->begin() - 1));
+        return (const_reverse_iterator(this->begin()));
     }
     template < class T, class Alloc >
     bool vector<T, Alloc>::empty() const
