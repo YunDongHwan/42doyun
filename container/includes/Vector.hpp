@@ -31,8 +31,7 @@ namespace ft
         public:
             // constructor, destructor
             vector();
-            vector(size_type count);
-            vector(size_type count, value_type value);
+            vector(size_type count, value_type value = value_type());
             template <class InputIterator>
             vector( InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0 );
             vector (const vector& other);
@@ -78,11 +77,14 @@ namespace ft
             iterator erase (iterator first, iterator last);
             void push_back( const T& value );
             void pop_back();
-            void resize( size_type count, T value = T() );
+            void resize( size_type count, value_type value = value_type() );
             void swap( vector& other );
             //Non-member functions
             //template< class T, class Alloc >
             //bool operator==( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs );
+			pointer	&get_arr() {return (v_arr);};
+			size_type	&get_size() {return (v_size);};
+			size_type	&get_capacity() {return (v_capacity);};
     };
     // constructor, destructor
     template < class T, class Alloc >
@@ -92,14 +94,14 @@ namespace ft
         v_size = 0;
         v_capacity = 4;
     }
-    template < class T, class Alloc >
-    vector<T, Alloc>::vector(size_type count)
-    {
-        v_arr = v_alloc.allocate(count + 4);
-        v_size = count;
-		assign(count, 0);
-        v_capacity = count + 4;
-    }
+    // template < class T, class Alloc >
+    // vector<T, Alloc>::vector(size_type count)
+    // {
+    //     v_arr = v_alloc.allocate(count + 4);
+    //     v_size = count;
+	// 	assign(count, );
+    //     v_capacity = count + 4;
+
     template < class T, class Alloc >
     vector<T, Alloc>::vector(size_type count, value_type value)
     {
@@ -153,11 +155,11 @@ namespace ft
     void vector<T, Alloc>::assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* )
     {
         clear();
-        v_capacity = last - first + 4;
         while (first != last)
         {
             push_back(*first++);
         }
+		v_capacity = v_size + 4;
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::allocator_type vector<T, Alloc>::get_allocator ( ) const
@@ -362,35 +364,40 @@ namespace ft
     void vector<T, Alloc>::insert( iterator pos, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type*  )
     {
         iterator    tmp;
-        iterator    tmp2;
+        InputIterator    tmp2;
         size_type   count;
         size_type   idx;
+		iterator	end;
+
         count = 0;
         idx = 0;
         tmp2 = first;
         while (tmp2++ != last)
-        {
             count++;
-        }
         if (v_capacity - v_size < count)
-        {
             reserve(v_capacity + count);
-        }
         tmp = v_alloc.allocate(v_size + count);
         for (iterator i = this->begin(); i != pos; i++)
         {
-            *tmp = v_arr[idx++];
-            tmp++;
+            *tmp++ = v_arr[idx++];
+			std::cout << "tmp : " << *tmp - 1<< std::endl;
         }
         while (first != last)
         {
-            tmp++ = first++;
+            *tmp++ = *first++;
+			std::cout << "2tmp  : " << *tmp - 1<< " | " << *first - 1<< std::endl;
         }
-        while (tmp != this->end())
+		v_size = v_size + count;
+		end = this->end();
+        while (tmp != end)
         {
+			//std::cout << "ss: " << v_size << std::endl;
             *tmp = v_arr[idx++];
             tmp++;
         }
+		std::cout << "s: " << v_size << std::endl;
+		v_alloc.deallocate(v_arr, v_capacity);
+		v_arr = tmp.get_ptr();
         v_size = v_size + count;
         // iter = this->begin();
         // while (iter++ != pos)
@@ -455,9 +462,10 @@ namespace ft
         v_size = v_size - 1;
     }
     template < class T, class Alloc >
-    void vector<T, Alloc>::resize( size_type count, T value)
+    void vector<T, Alloc>::resize( size_type count, value_type value)
     {
         size_type idx;
+
         idx = v_size;
         if (v_size > count)
             v_size = count;
@@ -465,10 +473,10 @@ namespace ft
         {
             if (count > v_capacity)
                 reserve(count + 4);
-            while (idx < count - v_size)
-            {
-                v_arr[idx++] = value;
-            }
+			while (idx < count - v_size)
+			{
+				v_arr[idx++] = value;
+			}
         }
         v_size = count;
     }
@@ -478,6 +486,101 @@ namespace ft
         std::swap(v_arr, other.v_arr);
         std::swap(v_size, other.v_size);
         std::swap(v_capacity, other.v_capacity);
+    }
+
+
+	template <class T, class Alloc>
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		size_t i;
+
+		if (lhs.size() != rhs.size())
+			return (0);
+		else
+		{
+			for (i = 0; i < lhs.size() && i < rhs.size(); i++)
+			{
+				if (lhs[i] != rhs[i])
+					return (0);
+			}
+			if (i < lhs.size() || i < rhs.size())
+				return (0);
+		}
+		return (1);
+	}
+
+	template <class T, class Alloc>
+  	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		size_t i;
+
+		if (lhs.size() != rhs.size())
+			return (1);
+		else
+		{
+			for (i = 0; i < lhs.size() && i < rhs.size(); i++)
+			{
+				if (lhs[i] != rhs[i])
+					return (1);
+			}
+			if (i < lhs.size() || i < rhs.size())
+				return (1);
+		}
+		return (0);
+	}
+
+	template <class T, class Alloc>
+  	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		size_t i;
+
+		for (i = 0; i < lhs.size() && i < rhs.size(); i++)
+		{
+			if (lhs[i] < rhs[i])
+				return (1);
+			else if (lhs[i] > rhs[i])
+				return (0);
+		}
+		if (i == lhs.size() && i < rhs.size())
+			return (1);
+		return (0);
+	}
+
+	template <class T, class Alloc>
+  	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (!(lhs > rhs));
+	}
+
+	template <class T, class Alloc>
+  	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		size_t i;
+
+		for (i = 0; i < lhs.size() && i < rhs.size(); i++)
+		{
+			if (lhs[i] > rhs[i])
+				return (1);
+			else if (lhs[i] < rhs[i])
+				return (0);
+		}
+		if (i == rhs.size() && i < lhs.size())
+			return (1);
+		return (0);
+	}
+
+	template <class T, class Alloc>
+  	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template < class T, class Alloc >
+    void swap( vector<T,Alloc>& lhs, vector<T,Alloc>& rhs )
+    {
+        std::swap(lhs.get_arr(), rhs.get_arr());
+        std::swap(lhs.get_size(), rhs.get_size());
+        std::swap(lhs.get_capacity(), rhs.get_capacity());
     }
 };
 #endif
