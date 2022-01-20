@@ -20,7 +20,7 @@ namespace ft
 		public:
 			VectorIterator() : ptr(0) {};
 			VectorIterator(pointer p) : ptr(p) {};
-			VectorIterator &operator=(const VectorIterator &tmp);
+			VectorIterator &operator=(const VectorIterator &tmp);			
 			~VectorIterator() {};
 			VectorIterator &operator++();
 			VectorIterator operator++(int);

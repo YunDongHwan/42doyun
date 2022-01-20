@@ -23,10 +23,10 @@ namespace ft
           	ReverseIterator(const VectorIterator<T> &it);
           //  template<class Tp>
            // ReverseIterator (VectorIterator<Tp> &it);
-		   ReverseIterator(ReverseIterator& tmp);
+		    ReverseIterator(ReverseIterator& tmp);
             ReverseIterator(const ReverseIterator& tmp);
-           // template <class Tp>
-           // ReverseIterator(ReverseIterator<Tp> &tmp);
+            template <class Tp>
+            ReverseIterator(ReverseIterator<Tp> &tmp) : ptr(tmp.get_ptr()){};
             ReverseIterator(pointer p) : ptr(p) {};
             ReverseIterator &operator=(const ReverseIterator &tmp);
 
@@ -173,7 +173,7 @@ namespace ft
 	template <class T>
 	bool ReverseIterator<T>::operator!=(const ReverseIterator<const T> &tmp) const
 	{
-		return (ptr == tmp.get_ptr());
+		return (ptr != tmp.get_ptr());
 	}
 	template <class T>
 	bool ReverseIterator<T>::operator<(const ReverseIterator<const T> &tmp) const

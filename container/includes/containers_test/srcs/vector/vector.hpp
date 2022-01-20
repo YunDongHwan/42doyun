@@ -13,8 +13,8 @@ namespace ft
         public:
             typedef T value_type;
             typedef Alloc allocator_type;
-            typedef typename Alloc::size_type size_type;
-            typedef typename Alloc::difference_type difference_type;
+            typedef size_t size_type;
+            typedef std::ptrdiff difference_type;
             typedef typename Alloc::reference reference;
             typedef typename Alloc::const_reference const_reference;
             typedef typename Alloc::pointer pointer;
@@ -186,8 +186,6 @@ namespace ft
     template < class T, class Alloc >
     typename vector<T, Alloc>::const_reference vector<T, Alloc>::at( size_type pos ) const
     {
-
-        std::cout << " | " << v_arr[pos] << " | " << (size()) << std::endl;
         if (pos >= size() || pos < 0)
         {
             throw (std::out_of_range("vector 의 index 가 범위를 초과하였습니다."));
