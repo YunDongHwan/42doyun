@@ -20,8 +20,9 @@ int		main(void)
 
 	for (unsigned long int i = 0; i < vct_c.size(); ++i)
 		std::cout << "vct_c.at(): " << vct_c.at(i) << std::endl;
+
 	try {
-		std::cout << vct_c.at(7) << std::endl;
+		std::cout << vct_c.at(10) << std::endl;
 	}
 	catch (std::out_of_range &e) {
 		std::cout << "Catch out_of_range exception!" << std::endl;

@@ -13,12 +13,12 @@ namespace ft
         public:
             typedef T value_type;
             typedef Alloc allocator_type;
-            typedef size_t size_type;
-            typedef std::ptrdiff_t difference_type;
-            typedef T& reference;
-            typedef const T& const_reference;
-            typedef T* pointer;
-            typedef const T* const_pointer;
+            typedef typename Alloc::size_type size_type;
+            typedef typename Alloc::difference_type difference_type;
+            typedef typename Alloc::reference reference;
+            typedef typename Alloc::const_reference const_reference;
+            typedef typename Alloc::pointer pointer;
+            typedef typename Alloc::const_pointer const_pointer;
             typedef VectorIterator<T> iterator;
             typedef VectorIterator<const T> const_iterator;
             typedef ReverseIterator<T> reverse_iterator;
@@ -125,11 +125,18 @@ namespace ft
             push_back(*first++);
         }
     }
+    
     template < class T, class Alloc >
-    vector<T, Alloc>::vector (const vector& other)
+    vector<T, Alloc>::vector (const vector& other) : v_alloc(other.v_alloc), v_size(other.v_size), v_capacity(other.v_capacity)
     {
-        assign(other.begin(), other.end());
+        v_arr = v_alloc.allocate(other.v_capacity);
+
+        for (size_type idx = 0; idx < v_size; idx++)
+        {
+            v_arr[idx] = other.v_arr[idx];
+        }
     }
+
     template < class T, class Alloc >
     vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& other)
     {
