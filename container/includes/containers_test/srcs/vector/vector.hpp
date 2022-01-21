@@ -14,11 +14,11 @@ namespace ft
             typedef T value_type;
             typedef Alloc allocator_type;
             typedef size_t size_type;
-            typedef std::ptrdiff difference_type;
-            typedef typename Alloc::reference reference;
-            typedef typename Alloc::const_reference const_reference;
-            typedef typename Alloc::pointer pointer;
-            typedef typename Alloc::const_pointer const_pointer;
+            typedef std::ptrdiff_t difference_type;
+            typedef T& reference;
+            typedef const T& const_reference;
+            typedef T* pointer;
+            typedef const T* const_pointer;
             typedef VectorIterator<T> iterator;
             typedef VectorIterator<const T> const_iterator;
             typedef ReverseIterator<T> reverse_iterator;
@@ -177,7 +177,7 @@ namespace ft
     template < class T, class Alloc >
     typename vector<T, Alloc>::reference vector<T, Alloc>::at(size_type pos)
     {
-        if (pos >= size() || pos < 0)
+        if (pos >= v_size || pos < 0)
         {
             throw (std::out_of_range("vector 의 index 가 범위를 초과하였습니다."));
         }
@@ -186,7 +186,7 @@ namespace ft
     template < class T, class Alloc >
     typename vector<T, Alloc>::const_reference vector<T, Alloc>::at( size_type pos ) const
     {
-        if (pos >= size() || pos < 0)
+        if (pos >= v_size || pos < 0)
         {
             throw (std::out_of_range("vector 의 index 가 범위를 초과하였습니다."));
         }
