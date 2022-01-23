@@ -4,7 +4,7 @@ CC =		clang++
 
 CXXFLAGS =	-Wall -Wextra -Werror
 
-SRC =		Vector.cpp
+SRC =		stack.cpp #Vector.cpp
 
 SRC_PATH =	$(addprefix ./srcs/, $(SRC))
 

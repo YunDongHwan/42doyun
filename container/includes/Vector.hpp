@@ -29,7 +29,6 @@ namespace ft
             size_type v_size;
             size_type v_capacity;
         public:
-            // constructor, destructor
             vector();
             vector(size_type count, value_type value = value_type());
             template <class InputIterator>
@@ -41,7 +40,7 @@ namespace ft
             void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = 0);
             allocator_type get_allocator ( ) const;
             ~vector();
-            //Element access
+
             reference at(size_type pos);
             const_reference at( size_type pos ) const;
             reference operator[]( size_type pos );
@@ -52,7 +51,7 @@ namespace ft
             const_reference back() const;
             T* data();
             const T* data() const;
-            //Iterators
+
             iterator begin();
             const_iterator begin() const;
             iterator end();
@@ -61,13 +60,13 @@ namespace ft
             const_reverse_iterator rbegin() const;
             reverse_iterator rend();
             const_reverse_iterator rend() const;
-            //Capacity
+
             bool empty() const;
             size_type size() const;
             size_type max_size() const;
             void reserve( size_type new_cap );
             size_type capacity() const;
-            //Modifiers
+
             void clear();
             iterator insert( iterator pos, const T& value );
             void insert( iterator pos, size_type count, const T& value );
@@ -79,9 +78,7 @@ namespace ft
             void pop_back();
             void resize( size_type count, value_type value = value_type() );
             void swap( vector& other );
-            //Non-member functions
-            //template< class T, class Alloc >
-            //bool operator==( const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs );
+
 			pointer	&get_arr() {return (v_arr);};
 			size_type	&get_size() {return (v_size);};
 			size_type	&get_capacity() {return (v_capacity);};
@@ -94,13 +91,6 @@ namespace ft
         v_size = 0;
         v_capacity = 4;
     }
-    // template < class T, class Alloc >
-    // vector<T, Alloc>::vector(size_type count)
-    // {
-    //     v_arr = v_alloc.allocate(count + 4);
-    //     v_size = count;
-	// 	assign(count, );
-    //     v_capacity = count + 4;
 
     template < class T, class Alloc >
     vector<T, Alloc>::vector(size_type count, value_type value)
@@ -125,7 +115,7 @@ namespace ft
             push_back(*first++);
         }
     }
-    
+
     template < class T, class Alloc >
     vector<T, Alloc>::vector (const vector& other) : v_alloc(other.v_alloc), v_size(other.v_size), v_capacity(other.v_capacity)
     {
@@ -328,21 +318,21 @@ namespace ft
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::iterator vector<T, Alloc>::insert( iterator pos, const T& value )
-    {                
+    {
         iterator    tmp;
         iterator    tmp_begin;
         size_type   idx;
         iterator    pos2;
 
-        idx = 0;      
+        idx = 0;
         tmp = v_alloc.allocate(v_size + 1);
         tmp_begin = tmp;
         for (iterator i = this->begin(); i != pos; i++)
         {
             *tmp++ = v_arr[idx++];
         }
-        pos2 = tmp;      
-        *tmp++ = value;        
+        pos2 = tmp;
+        *tmp++ = value;
         while(v_size - idx > 0)
         {
             *tmp = v_arr[idx++];
@@ -364,7 +354,7 @@ namespace ft
         iterator    tmp_begin;
         size_type   idx;
 
-        idx = 0;      
+        idx = 0;
         tmp = v_alloc.allocate(v_size + count);
         tmp_begin = tmp;
         for (iterator i = this->begin(); i != pos; i++)
@@ -402,7 +392,7 @@ namespace ft
         idx = 0;
         tmp2 = first;
         while (tmp2++ != last)
-            count++;        
+            count++;
         tmp = v_alloc.allocate(v_size + count);
         tmp_begin = tmp;
         for (iterator i = this->begin(); i != pos; i++)
@@ -425,21 +415,6 @@ namespace ft
         {
             v_arr[i] = *tmp_begin++;
         }
-        
-        // iter = this->begin();
-        // while (iter++ != pos)
-        // {
-        //  v_arr[idx++] = tmp[tmp_idx++];
-        // }
-        // while (first != last)
-        // {
-        //  v_arr[idx++] = *first++;
-        // }
-        // while (iter++ != this->end())
-        // {
-        //  v_arr[idx++] = tmp[tmp_idx++];
-        // }
-        // v_size = v_size + first - last;
     }
     template < class T, class Alloc >
     typename vector<T, Alloc>::iterator vector<T, Alloc>::erase( iterator pos )
@@ -463,7 +438,7 @@ namespace ft
         while (first != last)
         {
             erase(first);
-            last--;  
+            last--;
         }
         return (iterator(last));
     }

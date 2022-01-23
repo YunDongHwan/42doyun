@@ -24,7 +24,6 @@ int		main(void)
 	std::cout << "3: " << vct2.size() << std::endl;
 
 
-
 	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
 	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
