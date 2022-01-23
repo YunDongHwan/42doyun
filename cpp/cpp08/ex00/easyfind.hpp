@@ -16,13 +16,6 @@ typename T::iterator easyfind(T &container, int val)
 	if (tmp == container.end())
 		throw std::invalid_argument("not found value");
 	return (tmp);
-//	while (tmp != container.end())
-//	{
-//		if (*tmp==val)
-	//		return tmp;
-//		++tmp;
-//	}
-//	throw std::invalid_argument("not found value");
 }
 
 #endif
