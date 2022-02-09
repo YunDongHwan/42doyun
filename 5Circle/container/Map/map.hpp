@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "../mapset/RBTree.hpp"
+# include "../includes/RBTree.hpp"
 # include <iostream>
 # include <memory>
 # include <functional>
@@ -27,6 +27,7 @@ namespace ft
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 			typedef std::ptrdiff_t								difference_type;   //typename 안해도되나??????????
 			typedef std::size_t									size_type;
+
 			class value_compare : public std::binary_function<value_type, value_type, bool>
 			{
 				friend class map;
@@ -34,7 +35,7 @@ namespace ft
 					Compare	comp;
 					value_compare (Compare c) : comp(c) {}
 				public:
-					typedef bool		result_type;
+ 	 				typedef bool		result_type;
 					typedef value_type	first_argument_type;
 					typedef value_type	second_argument_type;
 					bool operator() (const value_type& x, const value_type& y) const

@@ -3,12 +3,13 @@
 
 # include "TreeIterator.hpp"
 
-namespace	ft{
+namespace	ft
+{
 	template<class Iterator>
 	class reverse_iterator
 	{
 		public:
-			typedef	Iterator	iterator_type;
+			typedef	Iterator														iterator_type;
 			typedef	typename	ft::iterator_traits<Iterator>::iterator_category	iterator_category;
 			typedef	typename	ft::iterator_traits<Iterator>::value_type			value_type;
 			typedef	typename	ft::iterator_traits<Iterator>::difference_type		difference_type;
@@ -23,7 +24,7 @@ namespace	ft{
 			explicit reverse_iterator (iterator_type it) : _iter(it) {};
 			template<class Iter>
   			reverse_iterator (const reverse_iterator<Iter>& other) : _iter(other.base()) {};
-			
+
 			template<class Iter>
 			reverse_iterator& operator=(const reverse_iterator<Iter>& other)
 			{

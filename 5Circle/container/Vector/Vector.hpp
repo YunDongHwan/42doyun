@@ -2,9 +2,10 @@
 # define VECTOR_HPP
 # include <iostream>
 # include <memory>
-# include "Iterator.hpp"
-# include "Identifies.hpp"
-# include "ReverseIterator.hpp"
+# include "../includes/Iterator.hpp"
+# include "../includes/VectorIterator.hpp"
+# include "../includes/Identifies.hpp"
+# include "../includes/VReverseIterator.hpp"
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
@@ -19,10 +20,10 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer 			pointer;
 			typedef typename allocator_type::const_pointer 		const_pointer;
-			typedef VectorIterator<T> 							iterator;
-			typedef VectorIterator<const T> 					const_iterator;
-			typedef ReverseIterator<iterator> 					reverse_iterator;
-			typedef ReverseIterator<const_iterator> 			const_reverse_iterator;
+			typedef ft::vector_iterator<T> 						iterator;
+			typedef ft::vector_iterator<const T> 				const_iterator;
+			typedef ft::reverse_iterator<iterator> 				reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
 
 		private:
 			pointer v_arr;
@@ -30,7 +31,7 @@ namespace ft
 			size_type v_size;
 			size_type v_capacity;
 
-		public:         
+		public:
 			vector();
 			vector(size_type count, value_type value = value_type());
 			template <class InputIterator>

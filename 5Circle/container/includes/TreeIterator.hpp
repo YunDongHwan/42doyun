@@ -20,7 +20,7 @@ namespace ft
 			typedef T                           value_type;
 			typedef value_type&                 reference;
 			typedef std::ptrdiff_t              difference_type;
-			typedef T*                          pointer;
+			typedef value_type*                 pointer;
 
 		private:
 			node_pointer _node;

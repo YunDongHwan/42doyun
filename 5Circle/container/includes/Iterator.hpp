@@ -5,12 +5,14 @@
 
 namespace ft
 {
+	//iterator tag 선언
 	struct	input_iterator_tag {};
 	struct	output_iterator_tag {};
 	struct	forward_iterator_tag : public input_iterator_tag, output_iterator_tag {};
 	struct	bidirectional_iterator_tag : public forward_iterator_tag {};
 	struct	random_access_iterator_tag : public bidirectional_iterator_tag {};
 
+	//iterator 기본 형 선언
 	template <	typename Iterator >
 	struct	iterator_traits
 	{
@@ -21,6 +23,7 @@ namespace ft
 		typedef typename Iterator::reference			reference;
 	};
 
+	//iterator T타입에 대해 iterator 선언
 	template <	typename T >
 	struct	iterator_traits<T*>
 	{
@@ -31,6 +34,7 @@ namespace ft
 		typedef T&							reference;
 	};
 
+	//iterator const T타입에 대해 iterator 선언
 	template <	typename T >
 	struct iterator_traits<const T*>
 	{
@@ -41,6 +45,7 @@ namespace ft
 		typedef const T&					reference;
 	};
 
+	//내가 선언한 iterator가 아닐 경우 의 iterator 기본 형 선언
 	template <	typename Category,
 				typename T,
 				typename Distance = ptrdiff_t,
