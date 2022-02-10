@@ -1,5 +1,5 @@
-#ifndef REBERSEITERATOR_HPP
-# define REBERSEITERATOR_HPP
+#ifndef VREBERSEITERATOR_HPP
+# define VREBERSEITERATOR_HPP
 
 # include "VectorIterator.hpp"
 namespace ft
@@ -15,14 +15,16 @@ namespace ft
 			typedef	typename	ft::iterator_traits<Iterator>::pointer				pointer;
 			typedef	typename	ft::iterator_traits<Iterator>::reference			reference;
         private:
-            pointer ptr;
+            //pointer ptr;
+            iterator_type ptr;
         public:
             reverse_iterator() : ptr(0) {};
-          	reverse_iterator(const const_vector_iterator<Iterator> &it);
-		    reverse_iterator(reverse_iterator& tmp);
+            template <class Iter>
+          	reverse_iterator(const vector_iterator<Iter> &it);
+		    //reverse_iterator(reverse_iterator& tmp);
             reverse_iterator(const reverse_iterator& tmp);
             template <class Iter>
-            reverse_iterator(reverse_iterator<Iter> &tmp) : ptr(tmp.get_ptr()){};
+            reverse_iterator(const reverse_iterator<Iter> &tmp) : ptr(tmp.base()){};
             reverse_iterator(pointer p) : ptr(p) {};
 			template <class Iter>
             reverse_iterator &operator=(const reverse_iterator<Iter>& tmp);
@@ -48,7 +50,7 @@ namespace ft
             reverse_iterator& operator-= (difference_type n);
             pointer operator->() const;
             reference operator[] (difference_type n) const;
-            pointer get_ptr() const;
+            iterator_type get_ptr() const;
     };
     // template<class Iterator>
     // reverse_iterator<Iterator>::operator reverse_iterator<const Iterator>() const
@@ -74,23 +76,31 @@ namespace ft
 
 
     template<class Iterator>
-    reverse_iterator<Iterator>::reverse_iterator (const const_vector_iterator<Iterator> &it)
+    template <class Iter>
+    reverse_iterator<Iterator>::reverse_iterator (const vector_iterator<Iter> &it)
     {
         this->ptr = it.get_ptr();
     }
 
+    // template<class Iterator>
+    // template <class Iter>
+    // reverse_iterator<Iterator>::reverse_iterator (const const_vector_iterator<Iter> &it)
+    // {
+    //     this->ptr = it.get_ptr();
+    // }
 
-    template<class Iterator>
-    reverse_iterator<Iterator>::reverse_iterator (reverse_iterator& tmp)
-    {
-    	ptr = tmp.get_ptr();
-    }
 
     // template<class Iterator>
     // reverse_iterator<Iterator>::reverse_iterator (const reverse_iterator& tmp)
     // {
-    //     ptr = tmp.get_ptr();
+    // 	ptr = tmp.get_ptr();
     // }
+
+    template<class Iterator>
+    reverse_iterator<Iterator>::reverse_iterator (const reverse_iterator& tmp)
+    {
+        ptr = tmp.get_ptr();
+    }
 
     template<class Iterator>
     reverse_iterator<Iterator> &reverse_iterator<Iterator>::operator++()
@@ -114,7 +124,7 @@ namespace ft
     template<class Iterator>
     typename reverse_iterator<Iterator>::pointer reverse_iterator<Iterator>::operator->() const
     {
-        return (ptr - 1);
+        return (&(*(ptr - 1)));
     }
     template<class Iterator>
     reverse_iterator<Iterator> &reverse_iterator<Iterator>::operator--()
@@ -201,7 +211,7 @@ namespace ft
         return (*(this->ptr - n - 1));
     }
     template<class Iterator>
-    typename reverse_iterator<Iterator>::pointer reverse_iterator<Iterator>::get_ptr() const
+    typename reverse_iterator<Iterator>::iterator_type reverse_iterator<Iterator>::get_ptr() const
     {
         return (ptr);
     }
