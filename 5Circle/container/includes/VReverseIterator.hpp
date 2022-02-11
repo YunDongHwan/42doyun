@@ -19,9 +19,7 @@ namespace ft
         public:
             reverse_iterator() : ptr() {};
             reverse_iterator(pointer p) : ptr(p) {};
-            explicit reverse_iterator (iterator_type it) : ptr(it.get_ptr()) {};
-            // template <class Iter>
-          	// reverse_iterator(const vector_iterator<Iter> &it);           
+            explicit reverse_iterator (iterator_type it) : ptr(it.get_ptr()) {};      
             template <class Iter>
             reverse_iterator(const reverse_iterator<Iter> &tmp)
             {
@@ -29,16 +27,13 @@ namespace ft
                 ptr2 = tmp.get_ptr();
                 ptr = ptr2;
             }
-            //reverse_iterator(pointer p) : ptr(p) {};
 			template <class Iter>
             reverse_iterator &operator=(const reverse_iterator<Iter>& tmp);
 
-            //~reverse_iterator() {};
-            //operator reverse_iterator<const Iterator>() const;
             iterator_type base() const;
             reference operator*() const;
             
-			bool operator==(const reverse_iterator<Iterator> &tmp) const; //<const Iterator> &tmp) const			
+			bool operator==(const reverse_iterator<Iterator> &tmp) const;		
             bool operator!=(const reverse_iterator<Iterator> &tmp) const;            
 			bool operator<(const reverse_iterator<Iterator> &tmp) const;            
 			bool operator>(const reverse_iterator<Iterator> &tmp) const;            
@@ -46,7 +41,7 @@ namespace ft
 			bool operator>=(const reverse_iterator<Iterator> &tmp) const;
 
             template <class Iter>
-			bool operator==(const reverse_iterator<Iter> &tmp) const; //<const Iterator> &tmp) const
+			bool operator==(const reverse_iterator<Iter> &tmp) const;
 			template <class Iter>
             bool operator!=(const reverse_iterator<Iter> &tmp) const;
             template <class Iter>
@@ -70,11 +65,7 @@ namespace ft
             reference operator[] (difference_type n) const;
             pointer get_ptr() const;
     };
-    // template<class Iterator>
-    // reverse_iterator<Iterator>::operator reverse_iterator<const Iterator>() const
-    // {
-    //     return (reverse_iterator<const Iterator>(ptr));
-    // }
+
 
     template<class Iterator>
     typename reverse_iterator<Iterator>::iterator_type reverse_iterator<Iterator>::base() const
@@ -90,30 +81,6 @@ namespace ft
 		ptr = tmp.get_ptr();
 		return (*this);
 	}
-
-
-
-    // template<class Iterator>
-    // template <class Iter>
-    // reverse_iterator<Iterator>::reverse_iterator (const vector_iterator<Iter> &it)
-    // {
-    //     this->ptr = it.get_ptr();
-    // }
-
-    // template<class Iterator>
-    // template <class Iter>
-    // reverse_iterator<Iterator>::reverse_iterator (const const_vector_iterator<Iter> &it)
-    // {
-    //     this->ptr = it.get_ptr();
-    // }
-
-
-
-    // template<class Iterator>
-    // reverse_iterator<Iterator>::reverse_iterator (const reverse_iterator& tmp)
-    // {
-    //     ptr = tmp.get_ptr();
-    // }
 
     template<class Iterator>
     reverse_iterator<Iterator> &reverse_iterator<Iterator>::operator++()
@@ -174,11 +141,11 @@ namespace ft
 	template <class Iterator>
     typename reverse_iterator<Iterator>::difference_type reverse_iterator<Iterator>::operator-(reverse_iterator const &tmp) const
     {
-        return (tmp.get_ptr() - this->ptr); //왜 tmp - this 야..
+        return (tmp.get_ptr() - this->ptr);
     }
 
     template <class Iterator>    
-	bool reverse_iterator<Iterator>::operator==(const reverse_iterator<Iterator> &tmp) const //<const Iterator> &tmp) const
+	bool reverse_iterator<Iterator>::operator==(const reverse_iterator<Iterator> &tmp) const
 	{
 		return (ptr == tmp.get_ptr());
 	}
@@ -210,7 +177,7 @@ namespace ft
 
     template <class Iterator>
     template <class Iter>
-	bool reverse_iterator<Iterator>::operator==(const reverse_iterator<Iter> &tmp) const //<const Iterator> &tmp) const
+	bool reverse_iterator<Iterator>::operator==(const reverse_iterator<Iter> &tmp) const
 	{
 		return (ptr == tmp.get_ptr());
 	}

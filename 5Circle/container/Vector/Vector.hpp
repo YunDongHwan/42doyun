@@ -174,10 +174,9 @@ namespace ft
 	template < class T, class Alloc >
 	vector<T, Alloc>::~vector()
 	{
-		// this->v_alloc.destroy();
-		// this->v_alloc.deallocate();
+		this->v_alloc.deallocate(v_alloc, v_capacity);
 	}
-	//Element access
+
 	template < class T, class Alloc >
 	typename vector<T, Alloc>::reference vector<T, Alloc>::at(size_type pos)
 	{
@@ -317,7 +316,7 @@ namespace ft
 	{
 		return (v_capacity);
 	}
-	template < class T, class Alloc >//////////
+	template < class T, class Alloc >
 	void vector<T, Alloc>::clear()
 	{
 		v_alloc.destroy(this->v_arr);

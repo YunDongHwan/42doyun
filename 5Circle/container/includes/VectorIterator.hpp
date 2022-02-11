@@ -255,14 +255,8 @@ namespace ft
 			const_vector_iterator &operator-=(int n);
 			reference operator[](int n);
 			pointer get_ptr() const;
-			// operator const_vector_iterator<const T>() const;
 			
 	};
-	// template<class T>
-	// const_vector_iterator<T>::operator const_vector_iterator<const T>() const
-	// {
-	// 	return (const_vector_iterator<const T>(ptr));
-	// }
 
 	template<class T>
 	const_vector_iterator<T> &const_vector_iterator<T>::operator=(const_vector_iterator const &tmp)
