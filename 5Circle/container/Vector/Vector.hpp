@@ -2,10 +2,10 @@
 # define VECTOR_HPP
 # include <iostream>
 # include <memory>
-# include "../includes/Iterator.hpp"
-# include "../includes/VectorIterator.hpp"
-# include "../includes/Identifies.hpp"
-# include "../includes/VReverseIterator.hpp"
+# include "../../../includes/Iterator.hpp"
+# include "../../../includes/VectorIterator.hpp"
+# include "../../../includes/Identifies.hpp"
+# include "../../../includes/VReverseIterator.hpp"
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
@@ -21,9 +21,9 @@ namespace ft
 			typedef typename allocator_type::pointer 			pointer;
 			typedef typename allocator_type::const_pointer 		const_pointer;
 			typedef ft::vector_iterator<T> 						iterator;
-			typedef ft::vector_iterator<const T> 				const_iterator;
+			typedef ft::const_vector_iterator<T> 				const_iterator;
 			typedef ft::reverse_iterator<iterator> 				reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		private:
 			pointer v_arr;
@@ -132,10 +132,14 @@ namespace ft
 
 	template < class T, class Alloc >
 	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& other)
-	{
-		v_arr = other.v_arr;
+	{	
 		v_size = other.v_size;
 		v_capacity = other.v_capacity;
+		v_arr = v_alloc.allocate(v_capacity);
+		for (size_type idx = 0; idx < v_size; idx++)
+		{
+			v_arr[idx] = other.v_arr[idx];
+		}
 		return (*this);
 	}
 	template < class T, class Alloc >
@@ -240,7 +244,7 @@ namespace ft
 	template < class T, class Alloc >
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
 	{
-		return (iterator(&v_arr[0]));
+		return (const_iterator(&v_arr[0]));
 	}
 	template < class T, class Alloc >
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
@@ -250,7 +254,7 @@ namespace ft
 	template < class T, class Alloc >
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
 	{
-		return (iterator(&v_arr[v_size]));
+		return (const_iterator(&v_arr[v_size]));
 	}
 	template < class T, class Alloc >
 	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
@@ -304,7 +308,7 @@ namespace ft
 			tmp[i] = v_arr[i];
 		}
 	//  v_alloc.destroy(v_arr);
-		v_alloc.deallocate(v_arr);
+		v_alloc.deallocate(v_arr, v_capacity);
 		v_arr = tmp;
 		v_capacity = new_cap;
 	}
