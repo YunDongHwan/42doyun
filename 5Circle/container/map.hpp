@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "../includes/RBTree.hpp"
+# include "./includes/RBTree.hpp"
 # include <iostream>
 # include <memory>
 # include <functional>

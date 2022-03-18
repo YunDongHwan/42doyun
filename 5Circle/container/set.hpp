@@ -1,7 +1,7 @@
 #ifndef SET_HPP
 # define SET_HPP
 
-# include "../includes/RBTree.hpp"
+# include "./includes/RBTree.hpp"
 # include <iostream>
 # include <memory>
 # include <functional>

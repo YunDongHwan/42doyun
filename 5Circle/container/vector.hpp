@@ -2,10 +2,10 @@
 # define VECTOR_HPP
 # include <iostream>
 # include <memory>
-# include "../../../includes/Iterator.hpp"
-# include "../../../includes/VectorIterator.hpp"
-# include "../../../includes/Identifies.hpp"
-# include "../../../includes/VReverseIterator.hpp"
+# include "./includes/Iterator.hpp"
+# include "./includes/VectorIterator.hpp"
+# include "./includes/Identifies.hpp"
+# include "./includes/VReverseIterator.hpp"
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
@@ -174,7 +174,9 @@ namespace ft
 	template < class T, class Alloc >
 	vector<T, Alloc>::~vector()
 	{
-		this->v_alloc.deallocate(v_alloc, v_capacity);
+		// for (int i = 0; i < v_size; i++)
+		// 	this->v_alloc.destroy(&v_arr[i]);
+		this->v_alloc.deallocate(v_arr, v_capacity);
 	}
 
 	template < class T, class Alloc >
@@ -306,7 +308,6 @@ namespace ft
 		{
 			tmp[i] = v_arr[i];
 		}
-	//  v_alloc.destroy(v_arr);
 		v_alloc.deallocate(v_arr, v_capacity);
 		v_arr = tmp;
 		v_capacity = new_cap;
@@ -319,7 +320,8 @@ namespace ft
 	template < class T, class Alloc >
 	void vector<T, Alloc>::clear()
 	{
-		v_alloc.destroy(this->v_arr);
+		for (size_type i = 0; i < v_size; i++)
+			this->v_alloc.destroy(&v_arr[i]);
 		v_size = 0;
 	}
 	template < class T, class Alloc >
