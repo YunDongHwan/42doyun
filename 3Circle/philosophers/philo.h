@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/16 18:23:54 by doyun             #+#    #+#             */
+/*   Updated: 2021/11/16 19:29:34 by doyun            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -6,11 +18,11 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# include "./Libft/libft.h"
 
 typedef struct s_info
 {
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	ifdie;
 	int				ph_num;
 	struct timeval	st;
 	unsigned int	st_t;
@@ -42,5 +54,7 @@ int				ph_eat(t_ph *ph);
 int				ph_init(int argc, char **argv, t_info **info, t_ph **ph);
 int				check_eatcount(t_ph *ph);
 int				ft_atoi(const char *str);
+void			check_fin(t_info *info, t_ph *ph);
+void			print_eatting(t_ph *ph);
 
 #endif

@@ -1,12 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   action.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/16 18:23:13 by doyun             #+#    #+#             */
+/*   Updated: 2021/11/16 19:27:20 by doyun            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./philo.h"
 
-int
-
-ph_die(t_ph *ph)
+int	ph_die(t_ph *ph)
 {
 	if (present(ph) - ph->last_eat >= ph->in->die_t)
 	{
-		printf("time : %u, philo%d is died\n", present(ph), ph->id);
+		pthread_mutex_lock(&(ph->in->ifdie));
+		if (ph->die == 1)
+			return (1);
+		printf("%u %d died\n", present(ph), ph->id);
 		ph->die = 1;
 		return (1);
 	}
@@ -15,13 +28,21 @@ ph_die(t_ph *ph)
 
 int	ph_think(t_ph *ph)
 {
-	printf("time : %u, philo%d is thinking\n", present(ph), ph->id);
+	pthread_mutex_lock(&(ph->in->ifdie));
+	if (ph->die == 1)
+		return (1);
+	printf("%u %d is thinking\n", present(ph), ph->id);
+	pthread_mutex_unlock(&(ph->in->ifdie));
 	return (0);
 }
 
 int	ph_sleep(t_ph *ph)
 {
-	printf("time : %u, philo%d is sleeping\n", present(ph), ph->id);
+	pthread_mutex_lock(&(ph->in->ifdie));
+	if (ph->die == 1)
+		return (1);
+	printf("%u %d is sleeping\n", present(ph), ph->id);
+	pthread_mutex_unlock(&(ph->in->ifdie));
 	ph->sl_st = present(ph);
 	doing(ph, ph->in->sleep_t, ph->sl_st);
 	if (ph_die(ph))
@@ -45,10 +66,14 @@ int	fork_mutex(t_ph *ph)
 		pthread_mutex_unlock(&(ph->in->fork[ph->id - 1]));
 		return (1);
 	}
-	printf("time : %u, philo%d has taken a fork\n", present(ph), ph->id);
-	printf("time : %u, philo%d is %d eating\n", present(ph), ph->id, ++ph->eat);
+	pthread_mutex_lock(&(ph->in->ifdie));
+	if (ph->die == 1)
+		return (1);
+	print_eatting(ph);
+	pthread_mutex_unlock(&(ph->in->ifdie));
 	ph->eat_st = present(ph);
 	doing(ph, ph->in->eat_t, ph->eat_st);
+	++ph->eat;
 	pthread_mutex_unlock(&(ph->in->fork[fork]));
 	pthread_mutex_unlock(&(ph->in->fork[ph->id - 1]));
 	return (0);

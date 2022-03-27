@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sonkang <sonkang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/04 11:47:39 by sonkang           #+#    #+#             */
-/*   Updated: 2021/08/04 11:49:01 by sonkang          ###   ########.fr       */
+/*   Created: 2021/11/16 18:24:02 by doyun             #+#    #+#             */
+/*   Updated: 2021/11/16 18:24:07 by doyun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ unsigned int	present(t_ph *ph)
 	return (now.tv_sec * 1000 + now.tv_usec / 1000 - ph->in->st_t);
 }
 
-void doing(t_ph *ph, unsigned int num, unsigned int st)
+void	doing(t_ph *ph, unsigned int num, unsigned int st)
 {
 	unsigned int	i;
 

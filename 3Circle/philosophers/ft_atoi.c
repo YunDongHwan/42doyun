@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/01 20:59:08 by doyun             #+#    #+#             */
-/*   Updated: 2021/08/01 18:06:31 by doyun            ###   ########.fr       */
+/*   Created: 2021/11/16 18:23:28 by doyun             #+#    #+#             */
+/*   Updated: 2021/11/16 18:23:32 by doyun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./philo.h"
 
 int	exception(long long int num)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: doyun <doyun@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/16 18:23:45 by doyun             #+#    #+#             */
+/*   Updated: 2021/11/16 19:22:26 by doyun            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./philo.h"
 
 void	*ph_life(void *ph_info)
@@ -51,6 +63,9 @@ int	info_parsing(t_info **info)
 	int		idx;
 
 	idx = -1;
+	check = pthread_mutex_init(&(*info)->ifdie, NULL);
+	if (check != 0)
+		return (print_error());
 	while (++idx < (*info)->ph_num)
 	{
 		check = pthread_mutex_init(&(*info)->fork[idx], NULL);
@@ -64,8 +79,8 @@ int	info_parsing(t_info **info)
 
 int	check_argument(char **argv)
 {
-	int idx;
-	int jdx;
+	int	idx;
+	int	jdx;
 
 	idx = 0;
 	while (argv[++idx])
@@ -83,14 +98,11 @@ int	check_argument(char **argv)
 
 int	main(int argc, char **argv)
 {
-	int			idx;
 	int			check;
 	t_info		*info;
 	t_ph		*ph;
 
-	if (argc != 5 && argc != 6)
-		return (print_error());
-	if (check_argument(argv) == -1)
+	if ((argc != 5 && argc != 6) || check_argument(argv) == -1)
 		return (print_error());
 	check = ph_init(argc, argv, &info, &ph);
 	if (check == -1)
@@ -99,13 +111,6 @@ int	main(int argc, char **argv)
 		return (-1);
 	if (birth_philo(ph, &info))
 		return (-1);
-	idx = -1;
-	while (1)
-	{
-		if (ph[++idx].die == 1 || check_eatcount(ph))
-			break ;
-		if (idx == info->ph_num - 1)
-			idx = -1;
-	}
+	check_fin(info, ph);
 	return (0);
 }
