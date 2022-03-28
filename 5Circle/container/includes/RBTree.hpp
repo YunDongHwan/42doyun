@@ -39,6 +39,11 @@ namespace ft
 			size_type		_size;
 
 		public:
+			RBTree() : _comp(), _alloc(), _node_alloc(), _meta_node(), _size()
+			{
+
+			}
+
 			RBTree(value_compare const &comp, allocate_type const &alloc, node_alloc_type const &node = node_alloc_type())
 				: _comp(comp), _alloc(alloc), _node_alloc(node), _meta_node(NULL), _size(0)
 			{
@@ -64,6 +69,11 @@ namespace ft
 				copyTree(ref.getRoot());
 				this->_size = ref._size;
 				return (*this);
+			}
+
+			~RBTree()
+			{
+				
 			}
 
 			void swap(RBTree &other)
