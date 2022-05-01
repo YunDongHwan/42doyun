@@ -75,35 +75,6 @@ namespace ft
 				return (lhs.s_ctnr >= rhs.s_ctnr);
 			}
 	};
-	// template <class T, class Container>
-	// bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr == rhs.s_ctnr);
-	// }
-	// template <class T, class Container>
-	// bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr != rhs.s_ctnr);
-	// }
-	// template <class T, class Container>
-	// bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr < rhs.s_ctnr);
-	// }
-	// template <class T, class Container>
-	// bool operator<= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr <= rhs.s_ctnr);
-	// }
-	// template <class T, class Container>
-	// bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr > rhs.s_ctnr);
-	// }
-	// template <class T, class Container>
-	// bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
-	// {
-	// 	return (lhs.s_ctnr >= rhs.s_ctnr);
-	// }
+
 };
 #endif

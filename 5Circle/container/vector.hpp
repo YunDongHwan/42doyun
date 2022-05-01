@@ -174,8 +174,6 @@ namespace ft
 	template < class T, class Alloc >
 	vector<T, Alloc>::~vector()
 	{
-		// for (int i = 0; i < v_size; i++)
-		// 	this->v_alloc.destroy(&v_arr[i]);
 		this->v_alloc.deallocate(v_arr, v_capacity);
 	}
 

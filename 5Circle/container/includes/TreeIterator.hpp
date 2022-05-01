@@ -238,7 +238,7 @@ namespace ft
 				return (_node->value);
 			}
 
-			pointer operator->() const //return 시, const 형을 반환
+			pointer operator->() const
 			{
 				return (&(_node->value));
 			}

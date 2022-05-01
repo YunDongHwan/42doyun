@@ -12,7 +12,6 @@ namespace ft
 	class vector_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
 	{
 		public:
-			//typedef T                                               iterator_type;
 			typedef random_access_iterator_tag      		iterator_category;
 			typedef T						                value_type;
 			typedef std::ptrdiff_t         					difference_type;
@@ -131,7 +130,7 @@ namespace ft
 		return (vector_iterator(this->ptr + n));
 	}
 	template<class T>
-	vector_iterator<T> operator+(long long int n, vector_iterator<T> iter) //no member
+	vector_iterator<T> operator+(long long int n, vector_iterator<T> iter)
 	{
 		return (vector_iterator<T>(iter.get_ptr() + n));
 	}
@@ -215,7 +214,6 @@ namespace ft
 	class const_vector_iterator : public ft::iterator<ft::random_access_iterator_tag, T>
 	{
 		public:
-			//typedef T                                               iterator_type;
 			typedef random_access_iterator_tag      		iterator_category;
 			typedef T						                value_type;
 			typedef std::ptrdiff_t         					difference_type;
@@ -330,7 +328,7 @@ namespace ft
 		return (const_vector_iterator(this->ptr + n));
 	}
 	template<class T>
-	const_vector_iterator<T> operator+(long long int n, const_vector_iterator<T> iter) //no member
+	const_vector_iterator<T> operator+(long long int n, const_vector_iterator<T> iter)
 	{
 		return (const_vector_iterator<T>(iter.get_ptr() + n));
 	}

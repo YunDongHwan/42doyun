@@ -73,7 +73,7 @@ namespace ft
 
 			~RBTree()
 			{
-				
+				clear();	
 			}
 
 			void swap(RBTree &other)
@@ -142,7 +142,7 @@ namespace ft
 
 			node_pointer minValueNode(node_pointer node) const
 			{
-				if (node == NULL) //delete할때 쓰는 것 같음
+				if (node == NULL)
 					return (node);
 				while (node->left != NULL)
 					node = node->left;
@@ -157,7 +157,7 @@ namespace ft
 			void	setRoot(node_pointer node) const
 			{
 				this->_meta_node->left = node;
-				this->_meta_node->right = node; //???? right는 필요한가????
+				this->_meta_node->right = node;
 				if (node != NULL)
 					node->parent = _meta_node;
 			}
@@ -191,12 +191,12 @@ namespace ft
 					erase(it++);
 			}
 
-			node_pointer find (const value_type& val) const// find tester 확인 필요
+			node_pointer find (const value_type& val) const
 			{
 				node_pointer tmp;
 
 				tmp = getRoot();
-				while (tmp != NULL) // <
+				while (tmp != NULL)
 				{
 					if (!_comp(tmp->value, val) && !_comp(val, tmp->value))
 						break;
@@ -390,8 +390,8 @@ namespace ft
 			{
 				node_pointer rightChild;
 
-				rightChild = node->right; //부모의 오른쪽 자식
-				if (rightChild == NULL) // ????
+				rightChild = node->right;
+				if (rightChild == NULL)
 					return ;
 				node->right = rightChild->left;
 				if (node->right != NULL)
@@ -509,6 +509,7 @@ namespace ft
 			void		deleteRedCase(node_pointer &node)
 			{
 				node_pointer child = node->left != NULL ? node->left : node->right;
+				
 				if (node == node->parent->left)
 					node->parent->left = child;
 				else
