@@ -119,7 +119,7 @@ namespace ft
 
 			void copyTree(node_pointer node)
 			{
-				if (node != NULL) //base con
+				if (node != NULL)
 				{
 					insertValue(node->value);
 					copyTree(node->left);
@@ -632,7 +632,7 @@ namespace ft
 				if (node->left == NULL || node->right == NULL)
 					return (node);
 				node_pointer tmp = minValueNode(node->right);
-				if (tmp->parent == node) //tmp left가 null
+				if (tmp->parent == node)
 				{
 					if (node->parent && node->parent->left == node)
 						node->parent->left = tmp;
@@ -640,7 +640,7 @@ namespace ft
 						node->parent->right = tmp;
 					tmp->left = node->left;
 					node->left->parent = tmp;
-					node->left = NULL; // 529번째줄로 return하기 위한 조건
+					node->left = NULL;
 					tmp->parent = node->parent;
 					node->parent = tmp;
 					node->right = tmp->right;

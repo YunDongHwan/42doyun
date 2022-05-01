@@ -128,7 +128,7 @@ namespace ft
         return (reverse_iterator(this->ptr - n));
     }
     template<class Iterator>
-    reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n, reverse_iterator<Iterator> iter) //no member
+    reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n, reverse_iterator<Iterator> iter)
     {
         return (reverse_iterator<Iterator>(iter.get_ptr() - n));
     }

@@ -86,7 +86,6 @@ namespace ft
 			size_type	&get_size() {return (v_size);};
 			size_type	&get_capacity() {return (v_capacity);};
 	};
-	// constructor, destructor
 	template < class T, class Alloc >
 	vector<T, Alloc>::vector()
 	{
