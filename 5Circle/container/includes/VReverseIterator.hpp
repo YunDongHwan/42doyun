@@ -119,7 +119,7 @@ namespace ft
         reverse_iterator tmp;
 
         tmp.ptr = this->ptr;
-        ptr = ptr + 1;
+        this->ptr = this->ptr + 1;
         return (tmp);
     }
     template<class Iterator>
