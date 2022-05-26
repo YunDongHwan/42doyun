@@ -1,5 +1,6 @@
 echo "\033[47;35m--Setting for docker--\033[0m\n"
 
+
 apt-get remove docker docker-engine docker.io containerd runc
 
 apt-get update
