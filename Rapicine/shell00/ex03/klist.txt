@@ -1,5 +1,0 @@
-Credentials cache: API:C36469C0-E560-4DEC-9A4E-994FB99E8B51
-        Principal: doyun@42SEOUL.KR
-
-  Issued                Expires               Principal
-Oct 14 11:57:15 2020  Oct 15 11:57:12 2020  krbtgt/42SEOUL.KR@42SEOUL.KR
