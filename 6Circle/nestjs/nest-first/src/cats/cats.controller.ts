@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
 import bodyParser = require('body-parser');
-import { CreateCatDto } from './CreateCatDto';
+import { CreateCat } from './CreateCatDto';
 import { CatsService } from './cats.service';
 import { Cats } from './interface/cats.interface';
 
