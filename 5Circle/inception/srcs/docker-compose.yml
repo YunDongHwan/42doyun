@@ -2,8 +2,8 @@ version: "2"
 
 services:
   mariadb:
+    image: mariadb
     container_name: mariadb
-    #image: mariadb
     volumes:
       - ~/data/maria:/var/lib/mysql
     restart: always
