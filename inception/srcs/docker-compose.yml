@@ -60,6 +60,6 @@ services:
 #       type: none
 #       device: ~/data/wordpress
 
-# networks:
-#   inception:
-#     driver: bridge
+networks:
+  inception:
+    driver: bridge
