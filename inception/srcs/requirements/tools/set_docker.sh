@@ -30,24 +30,29 @@ $(lsb_release -cs) stable"
 
 # Docker Engine 설치하기
 echo -e "\e[47;35m--6. install Docker Engine--\e[0m\n"
+sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
 # Docker compose install
 echo -e "\e[47;35m--7. install Docker compose--\e[0m\n"
 sudo apt-get install docker-compose
 
-#sudo 명령을 붙이지 않도록 도커를 실행하는 유저가 도커 그룹에 포함되어야 하기 때문에 등록해줌
+#docker 권한 설정 및 sudo 명령을 붙이지 않도록 도커를 실행하는 유저가 도커 그룹에 포함되어야 하기 때문에 등록해줌
 echo -e "\e[47;35m--8. register user--\e[0m\n"
-usermod -aG docker ${USER} 
+sudo groupadd docker
+sudo usermod -aG docker ${USER} 
+
+#docker compose 권한
+echo -e "\e[47;35m--9. init docker compose permission--\e[0m\n"
+sudo chmod 666 /var/run/docker.sock
 
 #환경파일 설정
-echo -e "\e[47;35m--Setting for environment variable load--\e[0m\n"
+echo -e "\e[47;35m--10. Setting for environment variable load--\e[0m\n"
 source ../../.env
 
-echo -e "\e[44;33m@@@It's set up@@@\e[0m\n\n"
 
-echo -e "\e[47;35m--Host conversion operation to replace DNS--\e[0m\n"
 # host 도메인 등록
+echo -e "\e[47;35m--11. Host conversion operation to replace DNS--\e[0m\n"
 echo '127.0.0.1 doyun.42.fr' >> /etc/hosts 
 echo '127.0.0.1 www.doyun.42.fr' >> /etc/hosts 
 
