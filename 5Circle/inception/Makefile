@@ -21,6 +21,6 @@ clean: stop
 	cd ./srcs/ && docker system prune -a; 
 
 fclean: clean
-	sudo rm -Rf ~/data/;
+	sudo rm -Rf ~/data/
 
 .PHONY: install setup build stop volrm clean fclean all
