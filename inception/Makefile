@@ -1,6 +1,6 @@
 NAME = inception
 
-all: setup build
+all: build
 
 install:
 	cd ./srcs/requirements/tools && sudo sh set_docker.sh
