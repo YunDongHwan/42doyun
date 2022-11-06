@@ -12,6 +12,8 @@ apt-get install \
 	software-properties-common
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -apt-key fingerprint 0EBFCD88
+#에러 발생시 crul에 표해고 L옵션으로 리다이렉션 되는경우 위치또한 표시해줌
+#gpg키를 받는 이유는 설치 전 gpg키를 확인하여 인증된 패키지만을 설치하여 패키지의 무결성을 검증할 수 있음
 
 add-apt-repository \ # 레포지토리를 추가하며 패키지 다운로드 하려 함
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
