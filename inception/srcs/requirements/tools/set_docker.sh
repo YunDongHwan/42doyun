@@ -7,9 +7,6 @@ sudo apt-get remove docker docker-engine docker.io containerd runc
 echo -e "\e[47;35m--install git--\e[0m\n"
 sudo apt-get update
 
-echo -e "\e[47;35m--install make--\e[0m\n"
-apt-get install make
-
 # apt package index를 업데이트 하고 HTTPS를 통해 repository 를 이용하기 위해 pakcage 들을 설치 해줍니다.
 echo -e "\e[47;35m--repository init--\e[0m\n"
 sudo apt-get install \
@@ -20,7 +17,7 @@ sudo apt-get install \
 
 # Docker의 Official GPG Key 를 등록합니다.
 echo -e "\e[47;35m--register pgp--\e[0m\n"
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg -y
 
 # stable repository 를 등록해줍니다.
 echo \
