@@ -8,7 +8,7 @@ RUN apt-get -y install nginx openssl vim
 RUN rm /etc/nginx/sites-available/default
 RUN rm /etc/nginx/sites-enabled/default
 
-COPY conf/nginx.conf /etc/nginx/sites-available/default  
+COPY conf/default.conf /etc/nginx/sites-available/default  
 RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 RUN mkdir /etc/nginx/ssl
