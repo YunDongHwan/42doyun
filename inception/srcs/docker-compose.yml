@@ -15,24 +15,27 @@ services:
     networks:
       inception:
     env_file: .env
-    wordpress:
-      depends_on:
-        - mariadb
-      image: wordpress
-      volumes:
-        - ~/data/doyun/wordpress:/var/www/wordpress
-      restart: always
-      ports:
-        - "9000:9000"
-      build:
-        context: ./requirements/wordpress
-        dockerfile: Dockerfile
-      networks:
-        inception:
-      env_file: .env
+
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - ~/data/doyun/wordpress:/var/www/wordpress
+    restart: always
+    ports:
+      - "9000:9000"
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    networks:
+      inception:
+    env_file: .env
 
   nginx:
     image: nginx
+    container_name: nginx
     restart: always
     depends_on:
       - wordpress
