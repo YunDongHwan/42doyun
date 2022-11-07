@@ -3,12 +3,12 @@ FROM debian:buster
 MAINTAINER doyun@student.42seoul.fr
 
 
-# RUN sudo curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-# # mariadb 셋팅
-# RUN sudo apt-get install software-properties-common
-# RUN sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] \
-# http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' 
-# RUN sudo deb-src 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
+RUN sudo curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+# mariadb 셋팅
+RUN sudo apt-get install software-properties-common
+RUN sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] \
+http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' 
+RUN sudo deb-src 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
 
 RUN apt-get -y update && apt-get -y upgrade
 
