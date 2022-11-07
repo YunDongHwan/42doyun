@@ -35,8 +35,8 @@ RUN	apt-get install -y nginx
 RUN	apt-get install -y openssl
 
 #nginx config
-COPY    conf/default /
-RUN     mv default /etc/nginx/sites-available/default
+COPY    conf/nginx.conf
+RUN     mv nginx.conf /etc/nginx/sites-available/default
 RUN		chown -R www-data:www-data /var/www
 
 RUN     openssl genrsa -out server.key 4096 

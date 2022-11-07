@@ -5,7 +5,7 @@ echo -e "\e[47;35m--1. delete docker old version--\e[0m\n"
 sudo apt-get remove docker docker-engine docker.io containerd runc
 
 echo -e "\e[47;35m--2. apt update--\e[0m\n"
-sudo apt-get update
+sudo apt-get update -y && sudo apt-get upgrade -y
 
 # apt package index를 업데이트 하고 HTTPS를 통해 repository 를 이용하기 위해 pakcage 들을 설치 해줍니다.
 echo -e "\e[47;35m--2. repository init--\e[0m\n"
@@ -35,7 +35,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
 # Docker compose install
 echo -e "\e[47;35m--7. install Docker compose--\e[0m\n"
-sudo apt-get install docker-compose
+sudo apt-get install docker-compose -y
 
 #docker 권한 설정 및 sudo 명령을 붙이지 않도록 도커를 실행하는 유저가 도커 그룹에 포함되어야 하기 때문에 등록해줌
 echo -e "\e[47;35m--8. register user--\e[0m\n"
