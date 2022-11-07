@@ -32,4 +32,4 @@ RUN chmod +x set_mariadb.sh
 EXPOSE 3306
 
 # mysqld_safe는 한마디로 말하면 mysqld를 감시하는 데몬
-ENTRYPOINT ["sh", "/set_mariadb.sh"]
+CMD ["sh", "/set_mariadb.sh"]
