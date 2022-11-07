@@ -10,7 +10,7 @@ MAINTAINER doyun@student.42seoul.fr
 # http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' 
 # RUN sudo deb-src 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
 
-RUN apt-get -y update && apt-get -y upgrade
+RUN sudo apt-get -y update && sudo apt-get -y upgrade
 
 RUN sudo apt-get install -y apt-transport-https
 
@@ -18,7 +18,7 @@ RUN sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF16
 
 
 # MariaDB server 설치 
-RUN apt-get -y update && apt-get -y upgrade
+RUN sudo apt-get -y update && sudo apt-get -y upgrade
 RUN sudo apt install mariadb-server vim
 
 COPY ./conf/my.cnf /etc/mysql/my.cnf
