@@ -10,7 +10,7 @@ MAINTAINER doyun@student.42seoul.fr
 # http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' 
 # RUN sudo deb-src 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
 
-RUN sudo apt update
+RUN apt-get -y update && apt-get -y upgrade
 
 RUN sudo apt-get install -y apt-transport-https
 
