@@ -2,7 +2,7 @@
 
 
 # apt package install
-echo -e "\e[47;35m--install git--\e[0m\n"
+echo -e "\e[47;35m--set apt-get--\e[0m\n"
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 
