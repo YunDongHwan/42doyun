@@ -10,16 +10,19 @@ MAINTAINER doyun@student.42seoul.fr
 # http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' 
 # RUN sudo deb-src 'http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
 
-RUN sudo apt-get -y update && sudo apt-get -y upgrade
 
-RUN sudo apt-get install -y apt-transport-https
+RUN apt-get install -y wget
 
-RUN sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+RUN apt-get -y update && apt-get -y upgrade
+
+RUN apt-get install -y apt-transport-https
+
+RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 
 
 # MariaDB server 설치 
-RUN sudo apt-get -y update && sudo apt-get -y upgrade
-RUN sudo apt install mariadb-server vim
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt install mariadb-server vim
 
 COPY ./conf/my.cnf /etc/mysql/my.cnf
 # my.cnf 파일에 포합된 다른 파일들이 첫 설치시 경로가 맞지않아 에러 발생 가능해서 옮겨줌

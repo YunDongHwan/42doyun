@@ -2,7 +2,6 @@ FROM debian:buster
 
 MAINTAINER doyun@student.42seoul.fr
 
-
 RUN     apt-get update -y && apt-get upgrade -y
 RUN     apt-get install -y tar
 RUN 	apt-get install -y php
