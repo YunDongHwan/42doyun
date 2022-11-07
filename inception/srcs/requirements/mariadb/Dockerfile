@@ -3,7 +3,7 @@ FROM debian:buster
 MAINTAINER doyun@student.42seoul.fr
 
 
-RUN sudo curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
+RUN sudo curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 # mariadb 셋팅
 RUN sudo apt-get install software-properties-common
 RUN sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] \
