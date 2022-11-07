@@ -2,7 +2,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', 'MARIA_DB' );
 /** MySQL database username */
 define( 'DB_USER', 'WP_ID' );
 /** MySQL database password */
@@ -22,6 +22,19 @@ define('SECURE_AUTH_SALT', 'gv<a}@>m!v4-3+B,+YpssgYJxCYMA}f=_)]j:.Kyp2g|GThg;I=D
 define('LOGGED_IN_SALT',   '2.@wI3!azG/-n6r+_fIM*APjGI5P,vPYW+l0o|_L4] X^({`M9+ATvO{#w*p!m*M');
 define('NONCE_SALT',       'npi!+W-.}I#Vi&a(% x:Z)d,S+v*I0iw2VJJ&F8+x9gV]+HvxYr^&px#,Q+<Sd<J');
 
+$table_prefix = 'wp_';
+
 define( 'WP_DEBUG', false );
+
+/* That's all, stop editing! Happy publishing. */
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', __DIR__ . '/' );
+}
+
+define('CONCATENATE_SCRIPTS', false);
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';
 
 

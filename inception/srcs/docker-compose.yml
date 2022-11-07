@@ -5,7 +5,7 @@ services:
     image: mariadb
     container_name: mariadb
     volumes:
-      - ~/data/doyun/maria:/var/lib/mysql
+      - ~/data/doyun/data/maria:/var/lib/mysql
     restart: always
     ports:
       - "3306:3306"
@@ -22,7 +22,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ~/data/doyun/wordpress:/var/www/wordpress
+      - ~/data/doyun/data/wordpress:/var/www/wordpress
     restart: always
     ports:
       - "9000:9000"
@@ -42,7 +42,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ~/data/doyun/wordpress:/var/www/wordpress
+      - ~/data/doyun/data/wordpress:/var/www/wordpress
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
@@ -56,13 +56,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ~/data/doyun/maria
+      device: ~/data/doyun/data/maria
   wordpress:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ~/data/doyun/wordpress
+      device: ~/data/doyun/data/wordpress
 
 networks:
   inception:
