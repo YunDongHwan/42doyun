@@ -1,15 +1,14 @@
 FROM debian:buster
 
-MAINTAINER doyun@student.42seoul.kr
+# install mariadb
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install mariadb-server -y
 
-RUN apt-get update
-RUN apt-get install -y mariadb-server vim ; 
+# config mariadb
+COPY ./tools/set_maria.sh ./set_maria.sh
+COPY ./conf/my.cnf ./etc/mysql/my.cnf
+COPY ./conf/ds_wordpress.sql ./
 
-COPY tools/setup.sh . 
-RUN chmod +x setup.sh 
+ENTRYPOINT ["sh", "./set_maria.sh"]
 
 EXPOSE 3306
-RUN rm /etc/mysql/mariadb.conf.d/50-server.cnf 
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/ 
-
-ENTRYPOINT ["bash", "/setup.sh"]

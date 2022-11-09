@@ -1,67 +1,75 @@
-version: "2"
+# docker-comopse version (docker version beyond 19.03.0+ <-> compose version 3.8v)
+version: "3.8"
 
+# definition fo services
 services:
-  mariadb:
-    image: mariadb
-    container_name: mariadb
-    volumes:
-      - ~/data/maria:/var/lib/mysql
-    restart: always
-    ports:
-      - "3306:3306"
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile
-    networks:
-      inception:
-    env_file: .env
 
-  wordpress:
-    depends_on:
-      - mariadb
-    container_name: wordpress
-    volumes:
-      - ~/data/wordpress:/var/www/wordpress
-    restart: always
-    ports:
-      - "9000:9000"
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
-    networks:
-      inception:
-    env_file: .env
-
+  # nginx
   nginx:
+    build: ./requirements/nginx
     container_name: nginx
+    image: nginx
+    ports:
+      - "443:443"
     restart: always
     depends_on:
       - wordpress
-    ports:
-      - "443:443"
-    volumes:
-      - ~/data/wordpress:/var/www/wordpress
-    build:
-      context: ./requirements/nginx
-      dockerfile: Dockerfile
     networks:
-      inception:
-    env_file: .env
+      - inception_network
+    env_file:
+      - .env
+    volumes:
+      - volume_wordpress:/var/www/wordpress
 
-volumes:
-  mariadb:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ~/data/maria
+  # wordpress
   wordpress:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ~/data/wordpress
+    depends_on:
+      - mariadb
+    build: ./requirements/wordpress
+    container_name: wordpress
+    image: wordpress
+    ports:
+      - "9000:9000"
+    restart: always
+    networks:
+      - inception_network
+    env_file:
+      - .env
+    volumes:
+      - volume_wordpress:/var/www/wordpress
 
+  # mariadb
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    image: mariadb
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - inception_network
+    env_file:
+      - .env
+    volumes:
+      - volume_mariadb:/var/lib/mysql
+
+# definition fo network
 networks:
-  inception:
-    driver: bridge
+  inception_network:
+
+# definition fo volumes
+volumes:
+
+  # maridb volume
+  volume_mariadb:
+    driver_opts:
+      device: /home/doyun/data/database
+      type: volume
+      o: bind
+
+  # wordpress volume
+  volume_wordpress:
+    driver_opts:
+      device: /home/doyun/data/wordpress
+      type: volume
+      o: bind

@@ -1,26 +1,19 @@
-NAME = inception
+.PHONY:	all up fclean
 
-all: setup build
+all:
+		@sudo mkdir -p /home/doyun/data/wordpress
+		@sudo mkdir -p /home/doyun/data/database
+		@sudo chmod 777 /etc/hosts
+		@sudo echo "127.0.0.1 doyun.42.fr" >> /etc/hosts
+		@sudo docker-compose -f srcs/docker-compose.yml up --build -d
 
 install:
-	cd ./srcs/requirements/tools && sudo sh set_for_docker.sh
+		@sudo sudo sh ./srcs/requirements/tools/set_docker.sh
 
-setup:
-	cd ./srcs/requirements/tools && sudo bash pre_work.sh
+up:
+		@sudo docker-compose -f srcs/docker-compose.yml up --build -d
 
-build: 
-	cd ./srcs/ && docker-compose up -d --build; 
-	
-stop:
-	cd ./srcs/ && docker-compose down; 
-
-volrm:
-	cd ./srcs/ && docker volume prune;
-
-clean: stop
-	cd ./srcs/ && docker system prune -a; 
-
-fclean: clean
-	sudo rm -Rf ~/data/
-
-.PHONY: install setup build stop volrm clean fclean all
+fclean:
+		@sudo docker-compose -f srcs/docker-compose.yml down --rmi all --volumes
+		@sudo docker rmi debian:buster
+		@sudo rm -rf /home/doyun/data
